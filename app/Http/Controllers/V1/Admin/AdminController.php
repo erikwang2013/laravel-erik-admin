@@ -54,6 +54,15 @@ class AdminController extends Controller
         //生成唯一id
         $params=$request->input();
         $id=HelperCommon::getCreateId();
+        $model=new Admin();
+        $params['id']=$id;
+        //过滤存在的数据
+        $data=HelperCommon::filterKey($model,$params,0); 
+        $result=$model->create($data);
+        if(!$result){
+            return HelperCommon::reset([],0,1,trans('admin.create_data_fail'));
+        }
+        return HelperCommon::reset([],0,0);
     }
 
     /**

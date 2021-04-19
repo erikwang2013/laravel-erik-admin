@@ -7,4 +7,7 @@ return [
     'data_center'=>'数据中心编号取值错误，取值范围为',
     'machine_number'=>'机器编号取值错误，取值范围为',
     'current_time'=>'当前时间不能小于最后一次时间！',
+    'create_data_fail'=>'创建失败！',
+    'admin_sex_man'=>'男',
+    'admin_sex_woman'=>'女',
 ];

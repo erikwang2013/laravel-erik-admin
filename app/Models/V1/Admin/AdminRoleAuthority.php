@@ -3,29 +3,22 @@ namespace App\Models\V1\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AdminInfo extends Model
+class AdminRoleAuthority extends Model
 {
-    protected $table = 'admin_info';
+    protected $table = 'admin_role_authority';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
-		'id'=>'string',
-		'sex' => 'int',
-		'age'=>'int',
-		'year'=>'int',
-        'month'=>'int',
-        'day'=>'int',
+		'authority_id'=>'string',
+		'role_id'=>'string'
 	];
 
 	protected $hidden = [];
 
 	protected $fillable = [
-		'id',
-		'real_name',
-		'img',
-		'create_time',
-		'update_time',
+		'authority_id',
+		'role_id'
 	];
 
 	/**
@@ -37,6 +30,5 @@ class AdminInfo extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['id','real_name','sex','age','year','month','day','img','create_time','update_time'];
-
+	public $findWhere=['authority_id','role_id'];
 }
