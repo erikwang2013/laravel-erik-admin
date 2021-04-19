@@ -5,8 +5,8 @@ class PageValidator extends BaseValidator
 {
         //验证规则
         protected $rule=[
-            'page'=>'numeric',
-            'limit'=>'numeric',
+            'page'=>'numeric|required',
+            'limit'=>'numeric|required',
         ];
     
         //验证提示消息
