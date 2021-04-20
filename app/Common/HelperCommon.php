@@ -1,7 +1,7 @@
 <?php
 namespace App\Common;
 
-use  App\common\Snowflake;
+use  App\Common\Snowflake;
 class HelperCommon
 {
      /**

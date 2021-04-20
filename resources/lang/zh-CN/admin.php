@@ -10,4 +10,6 @@ return [
     'create_data_fail'=>'创建失败！',
     'admin_sex_man'=>'男',
     'admin_sex_woman'=>'女',
+    'nick_name_fail'=>'昵称必须是中文或字符串！',
+    'real_name_fail'=>'真实姓名必须是中文',
 ];

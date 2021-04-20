@@ -146,5 +146,6 @@ return [
         'title'                 => '标题',
         'username'              => '用户名',
         'year'                  => '年',
+        'real_name'=>'真实姓名'
     ],
 ];

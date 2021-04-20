@@ -2,8 +2,9 @@
 
 namespace App\Models\V1\Admin;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory,
+	Illuminate\Database\Eloquent\Model,
+	Illuminate\Support\Facades\Hash;
 
 class Admin extends Model
 {
@@ -124,9 +125,50 @@ class Admin extends Model
 		];
 	}
 
-
+	/**
+	 * 新增管理员
+	 *
+	 * @Author erik
+	 * @Email erik@erik.xyz
+	 * @Url https://erik.xyz
+	 * @DateTime 2021-04-19 15:00:25
+	 * @param [type] $data
+	 * @return void
+	 */
 	public function create($data){
 		$result=Model::create($data);
 		return $result;
+	}
+
+	/**
+	 * 密码加密
+	 *
+	 * @Author erik
+	 * @Email erik@erik.xyz
+	 * @Url https://erik.xyz
+	 * @DateTime 2021-04-19 16:21:07
+	 * @param [type] $password
+	 * @return void
+	 */
+	public function setPassword($password){
+		return Hash::make($password);
+	}
+
+	/**
+	 * 校验密码
+	 *
+	 * @Author erik
+	 * @Email erik@erik.xyz
+	 * @Url https://erik.xyz
+	 * @DateTime 2021-04-20 10:45:53
+	 * @param [type] $password
+	 * @param [type] $hash
+	 * @return void
+	 */
+	public function checkPassword($password,$hash){
+		if(Hash::check($password,$hash)){
+			return true;
+		}
+		return false;
 	}
 }

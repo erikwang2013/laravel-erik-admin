@@ -5,9 +5,11 @@ namespace App\Http\Controllers\V1\Admin;
 use App\Http\Controllers\Controller,
     Illuminate\Http\Request,
     App\Models\V1\Admin\Admin,
+    App\Models\V1\Admin\AdminInfo,
     App\Common\HelperCommon,
     App\Validate\V1\PageValidator,
-    App\Http\Validations\V1\BaseValidation;
+    App\Http\Validations\V1\BaseValidation,
+    Illuminate\Support\Facades\DB;
 
 
 class AdminController extends Controller
@@ -20,16 +22,11 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $params=$request->input();
-        $model=new Admin();
-        //过滤存在的数据
-        $data=HelperCommon::filterKey($model,$params,0);   
-        
         //校验数据
         $validator=new BaseValidation();
         if(!$validator->validateRequest($request, 'index')){
             return HelperCommon::reset([],0,1,$validator->getError());
         }
-        
         //验证分页
         $pageData=[
             'page'=>isset($params['page'])?$params['page']:config('app.page'),
@@ -38,7 +35,9 @@ class AdminController extends Controller
         if(!$validator->check($pageData)){
             return HelperCommon::reset([],0,1,$validator->getError());
         }
-            
+        $model=new Admin();
+        //过滤存在的数据
+        $data=HelperCommon::filterKey($model,$params,0);   
         $result=$model->search($data,$pageData['page'],$pageData['limit']);
         return HelperCommon::reset($result['list'],$result['count']);
     }
@@ -51,17 +50,36 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+
         //生成唯一id
         $params=$request->input();
+        //校验数据
+        $validator=new BaseValidation();
+        if(!$validator->validateRequest($request, 'store')){
+            return HelperCommon::reset([],0,1,$validator->getError());
+        }
         $id=HelperCommon::getCreateId();
         $model=new Admin();
         $params['id']=$id;
+        
         //过滤存在的数据
         $data=HelperCommon::filterKey($model,$params,0); 
+        $data['hash']=$model->setPassword($params['password']);
+        $data['password']=$params['password'];
+        DB::beginTransaction();
         $result=$model->create($data);
         if(!$result){
+            DB::rollBack();
             return HelperCommon::reset([],0,1,trans('admin.create_data_fail'));
         }
+        $admin=new AdminInfo();
+        $info_data=HelperCommon::filterKey($admin,$params,0); 
+        $info_result=$admin->create($info_data);
+        if(!$info_result){
+            DB::rollBack();
+            return HelperCommon::reset([],0,1,trans('admin.create_data_fail'));
+        }
+        DB::commit();
         return HelperCommon::reset([],0,0);
     }
 
