@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('/admin', 'V1\Admin\AdminController@index');
 Route::post('/admin', 'V1\Admin\AdminController@store');
+Route::put('/admin', 'V1\Admin\AdminController@update');
+Route::delete('/admin', 'V1\Admin\AdminController@destroy');

@@ -53,4 +53,23 @@ class AdminInfo extends Model
 		$result=Model::create($data);
 		return $result;
 	}
+
+	/**
+	 * 更新管理员详情
+	 *
+	 * @Author erik
+	 * @Email erik@erik.xyz
+	 * @Url https://erik.xyz
+	 * @DateTime 2021-04-22 17:59:16
+	 * @param [type] $data
+	 * @param [type] $id
+	 * @return void
+	 */
+	public function updateData($data,$id){
+		return Model::where('id',$id)->update($data);
+	}
+
+	public function deleteAll($id){
+		return Model::whereIn('id',$id)->destroy();
+	}
 }

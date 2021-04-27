@@ -9,7 +9,8 @@ use App\Http\Controllers\Controller,
     App\Common\HelperCommon,
     App\Validate\V1\PageValidator,
     App\Http\Validations\V1\BaseValidation,
-    Illuminate\Support\Facades\DB;
+    Illuminate\Support\Facades\DB,
+    Illuminate\Support\Facades\Validator;
 
 
 class AdminController extends Controller
@@ -51,13 +52,15 @@ class AdminController extends Controller
     public function store(Request $request)
     {
 
-        //生成唯一id
+        
         $params=$request->input();
         //校验数据
         $validator=new BaseValidation();
         if(!$validator->validateRequest($request, 'store')){
             return HelperCommon::reset([],0,1,$validator->getError());
         }
+
+        //生成唯一id
         $id=HelperCommon::getCreateId();
         $model=new Admin();
         $params['id']=$id;
@@ -92,7 +95,30 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $params=$request->input();
+        $params['id']=$id;
+        //校验数据
+        $validator=new BaseValidation();
+        if(!$validator->validateRequest($request, 'update')){
+            return HelperCommon::reset([],0,1,$validator->getError());
+        }
+        unset($params['id']);
+        $model=new Admin();
+        DB::beginTransaction();
+        $result=$model->updateData($params,$id);
+        if(!$result){
+            DB::rollBack();
+            return HelperCommon::reset([],0,1,trans('admin.create_data_fail'));
+        }
+        $admin=new AdminInfo();
+        $info_data=HelperCommon::filterKey($admin,$params,0); 
+        $info_result=$admin->updateData($info_data,$id);
+        if(!$info_result){
+            DB::rollBack();
+            return HelperCommon::reset([],0,1,trans('admin.create_data_fail'));
+        }
+        DB::commit();
+        return HelperCommon::reset([],0,0);
     }
 
     /**
@@ -103,6 +129,28 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ids=explode(',',$id);
+        $validator=new BaseValidation();
+        foreach($ids as $k=>$v){
+            $validator = Validator::make(['id'=>$v], ['id'=>'numeric|min:19|required']);
+            if ($validator->fails()) {
+                return HelperCommon::reset([],0,1,$validator->errors());
+            }
+        }
+        $model=new Admin();
+        DB::beginTransaction();
+        $result=$model->deleteAll($ids);
+        if(!$result){
+            DB::rollBack();
+            return HelperCommon::reset([],0,1,trans('admin.delete_data_fail'));
+        }
+        $admin=new AdminInfo();
+        $info_result=$admin->deleteAll($ids);
+        if(!$info_result){
+            DB::rollBack();
+            return HelperCommon::reset([],0,1,trans('admin.delete_data_fail'));
+        }
+        DB::commit();
+        return HelperCommon::reset([],0,0);
     }
 }

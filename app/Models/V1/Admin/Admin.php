@@ -136,10 +136,27 @@ class Admin extends Model
 	 * @return void
 	 */
 	public function create($data){
-		$result=Model::create($data);
-		return $result;
+		return Model::create($data);
 	}
 
+	/**
+	 * 更新管理员
+	 *
+	 * @Author erik
+	 * @Email erik@erik.xyz
+	 * @Url https://erik.xyz
+	 * @DateTime 2021-04-22 17:56:51
+	 * @param [type] $data
+	 * @param [type] $id
+	 * @return void
+	 */
+	public function updateData($data,$id){
+		return Model::where('id',$id)->update($data);
+	}
+
+	public function deleteAll($id){
+		return Model::whereIn('id',$id)->destroy();
+	}
 	/**
 	 * 密码加密
 	 *

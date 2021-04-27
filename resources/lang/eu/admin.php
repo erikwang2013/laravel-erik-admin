@@ -5,6 +5,7 @@ return [
     'machine_number'=>'Wrong value of machine number, value range is',
     'current_time '=>'The current time cannot be less than the last time!',
     'create_data_fail'=>'Failed to create!',
+    'delete_data_fail'=>'Failed to delete!',
     'admin_sex_man'=>'Man',
     'admin_sex_woman'=>'Woman',
     'nick_name_fail'=>'Nickname must be Chinese or string!',
