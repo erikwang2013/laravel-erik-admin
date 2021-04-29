@@ -18,7 +18,7 @@ class HelperCommon
      */
     public static function filterKey($model,$data,$status=1){
         if($status==0){
-            $attributes = $model->findWhere;
+            $attributes = $model::findWhere();
             $data_info=[];
             foreach($data as $name=>$value){
                 if (in_array($name,$attributes)) {
@@ -27,10 +27,10 @@ class HelperCommon
             }
             return $data_info;
         }else{
-            $attributes = $model->findWhere;
+            $attributes =$model::findWhere();
             foreach($data as $name=>$value){
                 if (in_array($name,$attributes)) {
-                    $model->$name=$value;
+                    $model::$name=$value;
                 }
             }
         }

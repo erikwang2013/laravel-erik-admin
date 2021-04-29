@@ -34,6 +34,8 @@ class AdminAuthority extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['id','parent_id','code','name','show','status'];
+	public function findWhere(){
+		return ['id','parent_id','code','name','show','status'];
+	}
 
 }

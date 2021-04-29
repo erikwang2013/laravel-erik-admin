@@ -46,7 +46,9 @@ class Admin extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['id','name','nick_name','phone','email','status','access_token'];
+	public function findWhere(){
+		return ['id','name','nick_name','phone','email','status','access_token'];
+	}
 
 	/**
 	 * 管理员详情

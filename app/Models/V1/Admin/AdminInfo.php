@@ -37,7 +37,9 @@ class AdminInfo extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['id','real_name','sex','age','year','month','day','img','create_time','update_time'];
+	public function findWhere(){
+		return ['id','real_name','sex','age','year','month','day','img','create_time','update_time'];
+	}
 
 	/**
 	 * 新增管理员详情

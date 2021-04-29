@@ -30,6 +30,8 @@ class AdminRoleInfo extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['id','name','status','create_time'];
+	public function findWhere(){
+		return ['id','name','status','create_time'];
+	}
 
 }

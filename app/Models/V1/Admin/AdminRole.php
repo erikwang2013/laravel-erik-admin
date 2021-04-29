@@ -30,6 +30,8 @@ class AdminRole extends Model
 	 * @Url https://erik.xyz
 	 * @DateTime 2021-04-14 13:31:51
 	 */
-	public $findWhere=['admin_id','role_id'];
+	public function findWhere(){
+		return ['admin_id','role_id'];
+	}
 
 }
