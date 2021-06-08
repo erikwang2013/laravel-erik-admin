@@ -35,7 +35,7 @@ class AdminController extends Controller
         }
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
-        AdminServiceFacade::index($data, $pageData);
+        return AdminServiceFacade::index($data, $pageData);
     }
 
     /**
@@ -58,7 +58,7 @@ class AdminController extends Controller
 
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
-        AdminServiceFacade::store($data, $params);
+        return AdminServiceFacade::store($data, $params);
     }
 
     /**
@@ -77,7 +77,7 @@ class AdminController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
         unset($params['id']);
-        AdminServiceFacade::update($params, $id);
+        return AdminServiceFacade::update($params, $id);
     }
 
     /**
@@ -95,6 +95,6 @@ class AdminController extends Controller
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }
         }
-        AdminServiceFacade::destroy($ids);
+        return AdminServiceFacade::destroy($ids);
     }
 }
