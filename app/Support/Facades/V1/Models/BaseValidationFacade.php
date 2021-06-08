@@ -1,5 +1,6 @@
 <?php
-namespace App\Support\Facades;
+
+namespace App\Support\Facades\V1\Models;
 
 use Illuminate\Support\Facades\Facade;
 
