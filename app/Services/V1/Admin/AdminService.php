@@ -5,17 +5,34 @@ namespace App\Services\V1\Admin;
 use App\Support\Facades\V1\Models\AdminFacade,
     App\Support\Facades\V1\Models\AdminInfoFacade,
     App\Common\HelperCommon,
-    App\Support\Facades\V1\Models\BaseValidationFacade,
     Illuminate\Support\Facades\DB;
 
 class AdminService
 {
+    /**
+     * 管理员列表
+     *
+     * @param [type] $data
+     * @param [type] $pageData
+     * @return void
+     */
     public function index($data, $pageData)
     {
         $result = AdminFacade::search($data, $pageData['page'], $pageData['limit']);
         return HelperCommon::reset($result['list'], $result['count']);
     }
 
+    /**
+     * 新增管理员
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-08
+     * @param [type] $data
+     * @param [type] $params
+     * @return void
+     */
     public function store($data, $params)
     {
         $data['hash'] = AdminFacade::setPassword($params['password']);
@@ -36,6 +53,17 @@ class AdminService
         return HelperCommon::reset([], 0, 0);
     }
 
+    /**
+     * 更新管理员
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-08
+     * @param [type] $params
+     * @param [type] $id
+     * @return void
+     */
     public function update($params, $id)
     {
 
@@ -55,6 +83,16 @@ class AdminService
         return HelperCommon::reset([], 0, 0);
     }
 
+    /**
+     * 删除管理员
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-08
+     * @param [type] $ids
+     * @return void
+     */
     public function destroy($ids)
     {
         DB::beginTransaction();
