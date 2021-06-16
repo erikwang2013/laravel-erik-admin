@@ -12,12 +12,12 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    'page'=>1,
-    'limit'=>15,
+    'page' => 1,
+    'limit' => 15,
     //雪花算法配置
-    'snowflake'=>[
-        'data_center_id'=>0,   //数据中心编号
-        'unix_id'=>0      //机器编号 
+    'snowflake' => [
+        'data_center_id' => 0,   //数据中心编号
+        'unix_id' => 0      //机器编号
     ],
     'name' => env('APP_NAME', 'erik'),
 
@@ -233,7 +233,7 @@ return [
         'Str' => Illuminate\Support\Str::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View' => Illuminate\Support\Facades\View::class,
+        //'View' => Illuminate\Support\Facades\View::class,
 
     ],
 
