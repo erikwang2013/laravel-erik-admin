@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V1\Admin;
+namespace App\Models\V1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
@@ -62,7 +62,7 @@ class Admin extends Model
      */
     public function infoId()
     {
-        return $this->hasOne('App\Models\V1\Admin\AdminInfo', 'id', 'id');
+        return $this->hasOne('App\Models\V1\AdminInfo', 'id', 'id');
     }
 
 

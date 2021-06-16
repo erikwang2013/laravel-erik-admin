@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1\Admin;
+namespace App\Http\Controllers\V1\Backstage;
 
 use App\Http\Controllers\Controller,
     Illuminate\Http\Request,
@@ -33,6 +33,7 @@ class AdminController extends Controller
         if (!BaseValidationFacade::check($pageData)) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
+
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         return AdminServiceFacade::index($data, $pageData);

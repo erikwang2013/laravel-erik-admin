@@ -9,6 +9,6 @@ class AdminInfoFacade extends Facade
 
     public static function getFacadeAccessor()
     {
-        return 'App\Models\V1\Admin\AdminInfo';
+        return 'App\Models\V1\AdminInfo';
     }
 }
