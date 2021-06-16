@@ -84,7 +84,7 @@ class Admin extends Model
                 foreach ($params as $k => $v) {
                     switch ($k) {
                         case 'id':
-                            $model->where($k, (int)$v);
+                            $model->where($k, intval($v));
                             break;
                         case 'status':
                             $model->where($k, $v);
@@ -101,7 +101,7 @@ class Admin extends Model
         foreach ($result as $k => $v) {
             $info = $v['info_id'];
             $result[$k] = [
-                'id' => $v['id'],
+                'id' => intval($v['id']),
                 'name' => $v['name'],
                 'nick_name' => $v['nick_name'],
                 'phone' => $v['phone'],
@@ -197,5 +197,42 @@ class Admin extends Model
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取用户密码及hash
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-16
+     * @param [type] $username
+     * @return void
+     */
+    public function getPassword(string $username)
+    {
+        if (preg_match('/^[1][3456789][0-9]{9}$/', $username)) {
+            $result = $this->where('phone', $username)->first();
+        } elseif (preg_match('/^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$/', $username)) {
+            $result = $this->where('email', $username)->first();
+        } else {
+            $result = $this->where('name', $username)->first();
+        }
+        return $result;
+    }
+
+    /**
+     * 生成token校验hash
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-16
+     * @param [type] $salt
+     * @return void
+     */
+    public function setToken($salt)
+    {
+        return Hash::make($salt);
     }
 }
