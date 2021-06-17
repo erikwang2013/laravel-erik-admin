@@ -101,7 +101,7 @@ class Admin extends Model
         foreach ($result as $k => $v) {
             $info = $v['info_id'];
             $result[$k] = [
-                'id' => intval($v['id']),
+                'id' => $v['id'],
                 'name' => $v['name'],
                 'nick_name' => $v['nick_name'],
                 'phone' => $v['phone'],
