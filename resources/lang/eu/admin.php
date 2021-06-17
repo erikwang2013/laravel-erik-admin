@@ -11,5 +11,9 @@ return [
     'nick_name_fail' => 'Nickname must be Chinese or string!',
     'real_name_fail' => 'The real name must be in Chinese',
     'login_fail' => 'Wrong user name or password',
-    'login_stop' => 'Account disabled, please contact administrator'
+    'login_stop' => 'Account disabled, please contact administrator',
+    'logout_fail' => 'Logout failed',
+    'logout_true' => 'Login successful',
+    'check_token_select' => 'Authentication token is invalid!',
+    'check_token_fail' => 'Illegal authentication token!'
 ];

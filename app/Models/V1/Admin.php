@@ -4,7 +4,8 @@ namespace App\Models\V1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
-    Illuminate\Support\Facades\Hash;
+    Illuminate\Support\Facades\Hash,
+    Illuminate\Support\Str;
 
 class Admin extends Model
 {
@@ -231,8 +232,47 @@ class Admin extends Model
      * @param [type] $salt
      * @return void
      */
-    public function setToken($salt)
+    public function setToken($id)
     {
-        return Hash::make($salt);
+        $token = Str::random(88);
+        $result = $this->updateData(['access_token' => $token, 'token_hash' => Hash::make($token)], $id);
+        if (false == $result) {
+            return false;
+        }
+        return $token;
+    }
+
+    /**
+     * 获取tokenhash
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-17
+     * @param [type] $token
+     * @return void
+     */
+    public function getTokenHash($token)
+    {
+        return $this->select('token_hash', 'id')->where('access_token', $token)->first();
+    }
+
+    /**
+     * 校验token
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-17
+     * @param [type] $token
+     * @param [type] $token_hash
+     * @return void
+     */
+    public function checkToken($token, $token_hash)
+    {
+        if (Hash::check($token, $token_hash)) {
+            return true;
+        }
+        return false;
     }
 }

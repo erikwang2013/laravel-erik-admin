@@ -38,8 +38,9 @@ class PublicController extends Controller
      * @Date 2021-06-16
      * @return void
      */
-    public function logout()
+    public function logout(Request $request)
     {
+        return PublicServiceFacade::logout($request);
     }
 
     /**

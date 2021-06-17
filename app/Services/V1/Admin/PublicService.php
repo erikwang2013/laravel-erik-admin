@@ -3,8 +3,7 @@
 namespace App\Services\V1\Admin;
 
 use App\Support\Facades\V1\Models\AdminFacade,
-    App\Common\HelperCommon,
-    Illuminate\Support\Str;
+    App\Common\HelperCommon;
 
 class PublicService
 {
@@ -30,11 +29,8 @@ class PublicService
         if ($data->status) {
             return HelperCommon::reset([], 0, 1, trans('admin.login_stop'));
         }
-        //$token = md5($data->name . $data->id . time());
-        $token = Str::random(30);
-        $token_hash = AdminFacade::setToken($token);
-        $update = AdminFacade::updateData(['token_hash' => $token_hash, 'access_token' => $token], $data->id);
-        if (false == $update) {
+        $token = AdminFacade::setToken($data->id);
+        if (false == $token) {
             return HelperCommon::reset([], 0, 1, trans('admin.login_fail'));
         }
         $user_data = [
@@ -46,5 +42,25 @@ class PublicService
             'token' => $token
         ];
         return HelperCommon::reset($user_data, 0, 0);
+    }
+
+
+
+    public function logout($request)
+    {
+        $token = $request->header('authorization');
+        $data = AdminFacade::getTokenHash($token);
+        if (empty($data)) {
+            return HelperCommon::reset([], 0, 1, trans('admin.logout_fail'));
+        }
+        $check = AdminFacade::checkToken($token, $data->token_hash);
+        if (false == $check) {
+            return HelperCommon::reset([], 0, 1, trans('admin.logout_fail'));
+        }
+        $update = AdminFacade::updateData(['token_hash' => '', 'access_token' => ''], $data->id);
+        if (false == $update) {
+            return HelperCommon::reset([], 0, 1, trans('admin.logout_fail'));
+        }
+        return HelperCommon::reset([], 0, 0, trans('admin.logout_true'));
     }
 }

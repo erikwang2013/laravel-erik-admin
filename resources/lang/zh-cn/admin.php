@@ -14,5 +14,9 @@ return [
     'nick_name_fail' => '昵称必须是中文或字符串！',
     'real_name_fail' => '真实姓名必须是中文',
     'login_fail' => '用户名或密码错误',
-    'login_stop' => '账户禁用，请联系管理员'
+    'login_stop' => '账户禁用，请联系管理员',
+    'logout_fail' => '登出失败',
+    'logout_true' => '登出成功',
+    'check_token_select' => '认证token已失效！',
+    'check_token_fail' => '认证token非法！'
 ];

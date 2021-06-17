@@ -42,7 +42,7 @@ return [
         ],
 
         //后台认证
-        'backstage' => [
+        'admin' => [
             'driver' => 'token',
             'provider' => 'admins',
             'hash' => false,
