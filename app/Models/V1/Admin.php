@@ -76,7 +76,7 @@ class Admin extends Model
      * @param array $params
      * @return void
      */
-    public function search($params = [], $page, $limit)
+    public function search($page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
         $model = $this->where(function ($model) use ($params) {

@@ -20,7 +20,7 @@ class AdminService
      */
     public function index($data, $pageData)
     {
-        $result = AdminFacade::search($data, $pageData['page'], $pageData['limit']);
+        $result = AdminFacade::search($pageData['page'], $pageData['limit'], $data);
         return HelperCommon::reset($result['list'], $result['count']);
     }
 
@@ -110,34 +110,5 @@ class AdminService
         }
         DB::commit();
         return HelperCommon::reset([], 0, 0);
-    }
-
-    public function login($params)
-    {
-        $user_name = $params['user_name'];
-        $data = AdminFacade::getPassword($user_name);
-        $result = AdminFacade::checkPassword($data->password, $data->hash);
-        if (false == $result) {
-            return HelperCommon::reset([], 0, 1, trans('admin.login_fail'));
-        }
-        if ($data->status) {
-            return HelperCommon::reset([], 0, 1, trans('admin.login_stop'));
-        }
-        //$token = md5($data->name . $data->id . time());
-        $token = Str::random(30);
-        $token_hash = AdminFacade::setToken($token);
-        $update = AdminFacade::updateData(['token_hash' => $token_hash, 'access_token' => $token], $data->id);
-        if (false == $update) {
-            return HelperCommon::reset([], 0, 1, trans('admin.login_fail'));
-        }
-        $user_data = [
-            'id' => $data->id,
-            'name' => $data->name,
-            'phone' => $data->phone,
-            'nick_name' => $data->nick_name,
-            'email' => $data->email,
-            'token' => $token
-        ];
-        return HelperCommon::reset($user_data, 0, 0);
     }
 }

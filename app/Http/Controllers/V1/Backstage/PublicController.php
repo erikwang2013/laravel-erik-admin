@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller,
     App\Common\HelperCommon,
     App\Support\Facades\V1\Models\BaseValidationFacade,
     Illuminate\Http\Request,
-    App\Support\Facades\V1\Services\AdminServiceFacade;
+    App\Support\Facades\V1\Services\PublicServiceFacade;
 
 class PublicController extends Controller
 {
@@ -26,7 +26,7 @@ class PublicController extends Controller
         if (!BaseValidationFacade::validateRequest($request, 'login')) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
-        return AdminServiceFacade::login($params);
+        return PublicServiceFacade::login($params);
     }
 
     /**

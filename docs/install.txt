@@ -1,0 +1,11 @@
+
+安装扩展
+
+redis
+imagick
+apcu
+pdflib
+igbinary
+xhprof
+swoole
+xdebug
