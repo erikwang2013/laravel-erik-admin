@@ -41,9 +41,10 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
+        //后台认证
+        'backstage' => [
             'driver' => 'token',
-            'provider' => 'users',
+            'provider' => 'admins',
             'hash' => false,
         ],
     ],
@@ -69,6 +70,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\V1\admin::class,
         ],
 
         // 'users' => [

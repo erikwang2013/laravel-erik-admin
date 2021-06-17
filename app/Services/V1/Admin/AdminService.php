@@ -6,7 +6,8 @@ use App\Support\Facades\V1\Models\AdminFacade,
     App\Support\Facades\V1\Models\AdminInfoFacade,
     App\Common\HelperCommon,
     Illuminate\Support\Facades\DB,
-    Illuminate\Support\Facades\Crypt;
+    //    Illuminate\Support\Facades\Crypt,
+    Illuminate\Support\Str;
 
 class AdminService
 {
@@ -122,14 +123,15 @@ class AdminService
         if ($data->status) {
             return HelperCommon::reset([], 0, 1, trans('admin.login_stop'));
         }
-        $token = md5($data->name . $data->id . time());
+        //$token = md5($data->name . $data->id . time());
+        $token = Str::random(30);
         $token_hash = AdminFacade::setToken($token);
         $update = AdminFacade::updateData(['token_hash' => $token_hash, 'access_token' => $token], $data->id);
         if (false == $update) {
             return HelperCommon::reset([], 0, 1, trans('admin.login_fail'));
         }
         $user_data = [
-            'id' => intval($data->id),
+            'id' => $data->id,
             'name' => $data->name,
             'phone' => $data->phone,
             'nick_name' => $data->nick_name,
