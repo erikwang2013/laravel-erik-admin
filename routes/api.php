@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-
-
-
 //Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/backstage/login', 'V1\Backstage\PublicController@login');  //登录
