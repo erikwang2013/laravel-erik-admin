@@ -51,13 +51,13 @@ class AdminValidation
         return [
             'rules' => [
                 'id' => 'numeric|min:19',
-                'name' => 'alpha_dash|between:3,18|required',
+                'name' => 'alpha_dash|between:3,18',
                 'email' => 'email|between:6,18',
                 'phone' => 'regex:/^[1][3456789][0-9]{9}$/|size:11',
-                'status' => 'in:0,1|required',
-                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash|required',
+                'status' => 'in:0,1',
+                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash',
                 'real_name' => 'regex:/^[一-龥]{0,}$/',
-                'sex' => 'in:0,1|required',
+                'sex' => 'in:0,1',
                 'age' => 'numeric|size:3|between:1,120',
                 'year' => 'numeric|size:4|between:1900,2140',
                 'month' => 'numeric|size:2|between:1,12',

@@ -22,7 +22,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'backstage', 'middleware' => 'backstage'], function () {
         Route::get('/admin', 'V1\Backstage\AdminController@index');  //管理员列表
         Route::post('/admin', 'V1\Backstage\AdminController@store'); //新增管理员
-        Route::put('/admin', 'V1\Backstage\AdminController@update'); //更新管理员
+        Route::put('/admin/{id}', 'V1\Backstage\AdminController@update'); //更新管理员
         Route::delete('/admin', 'V1\Backstage\AdminController@destroy'); //删除管理员
         Route::get('/logout', 'V1\Backstage\PublicController@logout');  //登出
 

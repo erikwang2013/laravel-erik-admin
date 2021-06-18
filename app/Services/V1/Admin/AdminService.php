@@ -66,18 +66,26 @@ class AdminService
      */
     public function update($params, $id)
     {
-
-        DB::beginTransaction();
-        $result = AdminFacade::updateData($params, $id);
-        if (!$result) {
-            DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
-        }
+        $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
-        $info_result = AdminInfoFacade::updateData($info_data, $id);
-        if (!$info_result) {
-            DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+        if (count($admin_data) == 0 && count($info_data) == 0) {
+            return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
+        }
+        DB::beginTransaction();
+        if (count($admin_data) > 0) {
+            $result = AdminFacade::updateData($admin_data, $id);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
+            }
+        }
+
+        if (count($info_data) > 0) {
+            $info_result = AdminInfoFacade::updateData($info_data, $id);
+            if (!$info_result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
+            }
         }
         DB::commit();
         return HelperCommon::reset([], 0, 0);

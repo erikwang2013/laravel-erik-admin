@@ -52,8 +52,9 @@ class AuthorityController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->input('id', $id);
         $params = $request->input();
-        $params['id'] = $id;
+        //$params['id'] = $id;
         //校验数据
         if (!BaseValidationFacade::validateRequest($request, 'update')) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());

@@ -16,7 +16,7 @@ class HelperCommon
      * @param [type] $model
      * @param [type] $data 请求数据
      * @param integer $status 0返回数组 1覆盖对象
-     * @return void
+     * @return void|array
      */
     public static function filterKey($model, $data, $status = 1)
     {
