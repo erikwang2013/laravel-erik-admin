@@ -15,5 +15,8 @@ return [
     'logout_fail' => 'Logout failed',
     'logout_true' => 'Login successful',
     'check_token_select' => 'Authentication token is invalid!',
-    'check_token_fail' => 'Illegal authentication token!'
+    'check_token_fail' => 'Illegal authentication token!',
+    'show_on' => 'display',
+    'show_off' => 'hide',
+    'authority_top' => 'top-level',
 ];

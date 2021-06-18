@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller,
     App\Common\HelperCommon,
     Illuminate\Http\Request,
     Illuminate\Support\Facades\Validator,
-    App\Support\Facades\V1\Services\AuthorityServiceFacade;
+    App\Support\Facades\V1\Services\AuthorityServiceFacade,
+    App\Support\Facades\V1\Models\AdminAuthorityFacade;
 
 class AuthorityController extends Controller
 {
@@ -28,7 +29,7 @@ class AuthorityController extends Controller
         }
 
         //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
+        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         return AuthorityServiceFacade::index($data, $pageData);
     }
 
@@ -45,7 +46,7 @@ class AuthorityController extends Controller
         $params['id'] = $id;
 
         //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
+        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         return AuthorityServiceFacade::store($data, $params);
     }
 

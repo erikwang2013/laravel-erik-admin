@@ -85,7 +85,7 @@ class Admin extends Model
                 foreach ($params as $k => $v) {
                     switch ($k) {
                         case 'id':
-                            $model->where($k, intval($v));
+                            $model->where($k, $v);
                             break;
                         case 'status':
                             $model->where($k, $v);

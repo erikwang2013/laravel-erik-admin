@@ -18,5 +18,8 @@ return [
     'logout_fail' => '登出失败',
     'logout_true' => '登出成功',
     'check_token_select' => '认证token已失效！',
-    'check_token_fail' => '认证token非法！'
+    'check_token_fail' => '认证token非法！',
+    'show_on' => '显示',
+    'show_off' => '隐藏',
+    'authority_top' => '顶级',
 ];
