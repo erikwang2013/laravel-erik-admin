@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request,
     App\Support\Facades\V1\Models\AdminFacade,
-    App\Common\HelperCommon,
-    Illuminate\Http\Response;
+    App\Common\HelperCommon;
 
 
 class Backstage
@@ -21,7 +20,11 @@ class Backstage
      */
     public function handle(Request $request, Closure $next)
     {
-        $token = $request->header('authorization');
+        $token = htmlentities($request->header('authorization'), ENT_QUOTES);
+        if (strlen($token) != 88) {
+            echo json_encode(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
+            exit;
+        }
         $data = AdminFacade::getTokenHash($token);
         if (empty($data)) {
             echo json_encode((HelperCommon::reset([], 0, 1, trans('admin.check_token_select'))));

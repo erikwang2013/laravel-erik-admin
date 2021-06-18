@@ -25,6 +25,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/admin', 'V1\Backstage\AdminController@update'); //更新管理员
         Route::delete('/admin', 'V1\Backstage\AdminController@destroy'); //删除管理员
         Route::get('/logout', 'V1\Backstage\PublicController@logout');  //登出
+
+        Route::get('/authority', 'V1\Backstage\AuthorityController@index');  //权限列表
+        Route::post('/authority', 'V1\Backstage\AuthorityController@store'); //新增权限
+        Route::put('/authority', 'V1\Backstage\AuthorityController@update'); //更新权限
+        Route::delete('/authority', 'V1\Backstage\AuthorityController@destroy'); //删除权限
     });
 });
 //});
