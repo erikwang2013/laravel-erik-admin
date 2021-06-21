@@ -149,6 +149,7 @@ return [
         'title'                 => 'izenburua',
         'username'              => 'erabiltzailea',
         'year'                  => 'urtea',
-        'real_name'=>'Real name'
+        'real name'             => 'real name',
+        'nick name'             => 'nick name'
     ],
 ];

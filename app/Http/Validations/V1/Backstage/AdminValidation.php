@@ -8,19 +8,16 @@ class AdminValidation
     {
         return [
             'rules' => [
-                'id' => 'numeric|min:19',
-                'name' => 'alpha_dash|min:18',
-                'email' => 'email|min:50',
+                'id' => 'numeric|size:19',
+                'name' => 'alpha_dash|min:2|max:10',
+                'email' => 'email|min:7|max:18',
                 'phone' => 'regex:/^[1][3456789][0-9]{9}$/|size:11',
                 'status' => 'in:1,0',
-                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash',
-                'real_name' => 'regex:/^[一-龥]{0,}$/',
+                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash|min:1|max:10',
+                'real_name' => 'regex:/^[一-龥]{0,}$/|min:2|max:6',
                 'sex' => 'in:0,1'
             ],
-            'messages' => [
-                'nick_name' => trans('admin.nick_name_fail'),
-                'real_name' => trans('admin.real_name_fail')
-            ],
+            'messages' => [],
         ];
     }
 
@@ -28,19 +25,18 @@ class AdminValidation
     {
         return [
             'rules' => [
-                'name' => 'alpha_dash|between:3,18|required',
-                'password' => 'alpha_dash|between:6,18|required',
-                'email' => 'email|between:6,18',
+                'name' => 'alpha_dash|min:2|max:10|required',
+                'password' => 'alpha_dash|min:6|max:18|required',
+                'email' => 'email|min:7|max:18',
                 'phone' => 'regex:/^[1][3456789][0-9]{9}$/|size:11',
                 'status' => 'in:0,1|required',
-                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash|required',
-                'real_name' => 'regex:/^[一-龥]{0,}$/',
+                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash|required|min:1|max:10',
+                'real_name' => 'regex:/^[一-龥]{0,}$/|min:2|max:6',
                 'sex' => 'in:0,1|required',
-                'age' => 'numeric|size:3|between:1,120',
-                'year' => 'numeric|size:4|between:1900,2140',
-                'month' => 'numeric|size:2|between:1,12',
-                'day' => 'numeric|size:2|between:1,31',
-                'img' => 'image|size:10'
+                'year' => 'numeric|between:1919,2050|required',
+                'month' => 'numeric|between:1,12|required',
+                'day' => 'numeric|between:1,31|required',
+                'img' => 'image|size:50'
             ],
             'messages' => [],
         ];
@@ -50,19 +46,18 @@ class AdminValidation
     {
         return [
             'rules' => [
-                'id' => 'numeric|min:19',
-                'name' => 'alpha_dash|between:3,18',
-                'email' => 'email|between:6,18',
+                'id' => 'numeric|size:19',
+                'name' => 'alpha_dash|min:2|max:10',
+                'email' => 'email|min:7|max:18',
                 'phone' => 'regex:/^[1][3456789][0-9]{9}$/|size:11',
                 'status' => 'in:0,1',
-                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash',
-                'real_name' => 'regex:/^[一-龥]{0,}$/',
+                'nick_name' => 'regex:/^[一-龥]{0,}$/|alpha_dash|min:1|max:10',
+                'real_name' => 'regex:/^[一-龥]{0,}$/|min:2|max:6',
                 'sex' => 'in:0,1',
-                'age' => 'numeric|size:3|between:1,120',
-                'year' => 'numeric|size:4|between:1900,2140',
-                'month' => 'numeric|size:2|between:1,12',
-                'day' => 'numeric|size:2|between:1,31',
-                'img' => 'image|size:10'
+                'year' => 'numeric|between:1919,2050',
+                'month' => 'numeric|between:1,12',
+                'day' => 'numeric|between:1,31',
+                'img' => 'image|size:50'
             ],
             'messages' => [],
         ];

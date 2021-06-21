@@ -4,7 +4,6 @@ namespace App\Http\Controllers\V1\Backstage;
 
 use App\Http\Controllers\Controller,
     Illuminate\Http\Request,
-    App\Support\Facades\V1\Models\AdminFacade,
     App\Common\HelperCommon,
     App\Support\Facades\V1\Models\BaseValidationFacade,
     Illuminate\Support\Facades\Validator,
@@ -33,10 +32,7 @@ class AdminController extends Controller
         if (!BaseValidationFacade::check($pageData)) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
-
-        //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
-        return AdminServiceFacade::index($data, $pageData);
+        return AdminServiceFacade::index($params, $pageData);
     }
 
     /**
@@ -56,10 +52,7 @@ class AdminController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
-
-        //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
-        return AdminServiceFacade::store($data, $params);
+        return AdminServiceFacade::store($params);
     }
 
     /**

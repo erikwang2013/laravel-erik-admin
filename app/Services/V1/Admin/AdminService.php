@@ -16,8 +16,10 @@ class AdminService
      * @param [type] $pageData
      * @return void
      */
-    public function index($data, $pageData)
+    public function index($params, $pageData)
     {
+        //过滤存在的数据
+        $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $result = AdminFacade::search($pageData['page'], $pageData['limit'], $data);
         return HelperCommon::reset($result['list'], $result['count']);
     }
@@ -33,21 +35,29 @@ class AdminService
      * @param [type] $params
      * @return void
      */
-    public function store($data, $params)
+    public function store($params)
     {
+        $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
+        $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
         $data['hash'] = AdminFacade::setPassword($params['password']);
         $data['password'] = $params['password'];
         DB::beginTransaction();
-        $result = AdminFacade::create($data);
-        if (!$result) {
-            DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+        if (count($admin_data) == 0) {
+            $result = AdminFacade::create($data);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+            }
         }
-        $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
-        $info_result = AdminInfoFacade::create($info_data);
-        if (!$info_result) {
-            DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+        if (count($info_data) == 0) {
+            if ($info_data['year']) {
+                $info_data['age'] = (date('Y') - $info_data['year']) + 1;
+            }
+            $info_result = AdminInfoFacade::create($info_data);
+            if (!$info_result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+            }
         }
         DB::commit();
         return HelperCommon::reset([], 0, 0);
@@ -68,9 +78,6 @@ class AdminService
     {
         $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
-        if (count($admin_data) == 0 && count($info_data) == 0) {
-            return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
-        }
         DB::beginTransaction();
         if (count($admin_data) > 0) {
             $result = AdminFacade::updateData($admin_data, $id);
@@ -81,6 +88,9 @@ class AdminService
         }
 
         if (count($info_data) > 0) {
+            if ($info_data['year']) {
+                $info_data['age'] = (date('Y') - $info_data['year']) + 1;
+            }
             $info_result = AdminInfoFacade::updateData($info_data, $id);
             if (!$info_result) {
                 DB::rollBack();

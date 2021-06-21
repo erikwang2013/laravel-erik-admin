@@ -31,8 +31,8 @@ class BaseValidation
         if (!$validator = $this->getValidator($request, $name)) {
             return;
         }
-        $rules    = HelperCommon::array_get($validator, 'rules', []);
-        $messages = HelperCommon::array_get($validator, 'messages', []);
+        $rules    = HelperCommon::array_get($validator, 'rules');
+        $messages = HelperCommon::array_get($validator, 'messages');
         $validator = Validator::make($request->input(), $rules, $messages);
         if ($validator->fails()) {
             $this->error = $validator->errors()->first();
