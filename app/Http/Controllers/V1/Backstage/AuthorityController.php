@@ -28,9 +28,7 @@ class AuthorityController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
 
-        //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
-        return AuthorityServiceFacade::index($data, $pageData);
+        return AuthorityServiceFacade::index($params, $pageData);
     }
 
     public function store(Request $request)
@@ -44,17 +42,13 @@ class AuthorityController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
-
-        //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
-        return AuthorityServiceFacade::store($data, $params);
+        return AuthorityServiceFacade::store($params);
     }
 
     public function update(Request $request, $id)
     {
         $request->input('id', $id);
         $params = $request->input();
-        //$params['id'] = $id;
         //校验数据
         if (!BaseValidationFacade::validateRequest($request, 'update')) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());

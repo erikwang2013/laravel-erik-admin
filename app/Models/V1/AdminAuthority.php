@@ -95,4 +95,14 @@ class AdminAuthority extends Model
             'count' => $count
         ];
     }
+
+    public function updateData($data, $id)
+    {
+        return $this->where('id', $id)->update($data);
+    }
+
+    public function deleteAll($id)
+    {
+        return $this->whereIn('id', $id)->destroy();
+    }
 }

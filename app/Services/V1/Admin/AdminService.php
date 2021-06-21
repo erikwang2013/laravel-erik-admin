@@ -5,7 +5,8 @@ namespace App\Services\V1\Admin;
 use App\Support\Facades\V1\Models\AdminFacade,
     App\Support\Facades\V1\Models\AdminInfoFacade,
     App\Common\HelperCommon,
-    Illuminate\Support\Facades\DB;
+    Illuminate\Support\Facades\DB,
+    Exception;
 
 class AdminService
 {
@@ -41,26 +42,31 @@ class AdminService
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
         $data['hash'] = AdminFacade::setPassword($params['password']);
         $data['password'] = $params['password'];
-        DB::beginTransaction();
-        if (count($admin_data) == 0) {
-            $result = AdminFacade::create($data);
-            if (!$result) {
-                DB::rollBack();
-                return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
+        try {
+            DB::beginTransaction();
+            if (count($admin_data) == 0) {
+                $result = AdminFacade::create($data);
+                if (!$result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.create_data_fail'));
+                }
             }
+            if (count($info_data) == 0) {
+                if ($info_data['year']) {
+                    $info_data['age'] = (date('Y') - $info_data['year']) + 1;
+                }
+                $info_result = AdminInfoFacade::create($info_data);
+                if (!$info_result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.create_data_fail'));
+                }
+            }
+            DB::commit();
+            return HelperCommon::reset([], 0, 0);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return HelperCommon::reset([], 0, 1, $e->getMessage());
         }
-        if (count($info_data) == 0) {
-            if ($info_data['year']) {
-                $info_data['age'] = (date('Y') - $info_data['year']) + 1;
-            }
-            $info_result = AdminInfoFacade::create($info_data);
-            if (!$info_result) {
-                DB::rollBack();
-                return HelperCommon::reset([], 0, 1, trans('admin.create_data_fail'));
-            }
-        }
-        DB::commit();
-        return HelperCommon::reset([], 0, 0);
     }
 
     /**
@@ -78,27 +84,32 @@ class AdminService
     {
         $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
-        DB::beginTransaction();
-        if (count($admin_data) > 0) {
-            $result = AdminFacade::updateData($admin_data, $id);
-            if (!$result) {
-                DB::rollBack();
-                return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
+        try {
+            DB::beginTransaction();
+            if (count($admin_data) > 0) {
+                $result = AdminFacade::updateData($admin_data, $id);
+                if (!$result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
             }
-        }
 
-        if (count($info_data) > 0) {
-            if ($info_data['year']) {
-                $info_data['age'] = (date('Y') - $info_data['year']) + 1;
+            if (count($info_data) > 0) {
+                if ($info_data['year']) {
+                    $info_data['age'] = (date('Y') - $info_data['year']) + 1;
+                }
+                $info_result = AdminInfoFacade::updateData($info_data, $id);
+                if (!$info_result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
             }
-            $info_result = AdminInfoFacade::updateData($info_data, $id);
-            if (!$info_result) {
-                DB::rollBack();
-                return HelperCommon::reset([], 0, 1, trans('admin.update_data_fail'));
-            }
+            DB::commit();
+            return HelperCommon::reset([], 0, 0);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return HelperCommon::reset([], 0, 1, $e->getMessage());
         }
-        DB::commit();
-        return HelperCommon::reset([], 0, 0);
     }
 
     /**
@@ -117,12 +128,12 @@ class AdminService
         $result = AdminFacade::deleteAll($ids);
         if (!$result) {
             DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.delete_data_fail'));
+            return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
         }
         $info_result = AdminInfoFacade::deleteAll($ids);
         if (!$info_result) {
             DB::rollBack();
-            return HelperCommon::reset([], 0, 1, trans('admin.delete_data_fail'));
+            return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
         }
         DB::commit();
         return HelperCommon::reset([], 0, 0);
