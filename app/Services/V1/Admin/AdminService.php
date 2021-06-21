@@ -243,4 +243,27 @@ class AdminService
         }
         return HelperCommon::reset([], 0, 0);
     }
+
+    public function roleDestroy($params)
+    {
+        foreach ($params['ids'] as $k => $v) {
+            DB::beginTransaction();
+            $first = AdminFacade::getFirstData($v);
+            if ($first->authority == 0) {
+                $result = AdminFacade::updateData(['authority' => 1], $v);
+                if (!$result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
+            }
+            $delete = AdminRoleFacade::deleteOne($v);
+            if (false == $delete) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+            DB::commit();
+        }
+
+        return HelperCommon::reset([], 0, 0);
+    }
 }

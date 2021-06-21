@@ -138,7 +138,29 @@ class AdminController extends Controller
         return AdminServiceFacade::roleUpdate($params);
     }
 
+    /**
+     * 删除管理员角色
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param Request $request
+     * @return void
+     */
     public function roleDestroy(Request $request)
     {
+        $params = $request->input();
+        $params['authority'] = 1;
+        $ids = explode(',', $params['id']);
+        foreach ($ids as $k => $v) {
+            $validator = Validator::make(['id' => $v], ['id' => 'size:19|required']);
+            if ($validator->fails()) {
+                return HelperCommon::reset([], 0, 1, $validator->errors());
+            }
+        }
+        $params['ids'] = $ids;
+        unset($params['id']);
+        return AdminServiceFacade::roleDestroy($params);
     }
 }
