@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/authority', 'V1\Backstage\AuthorityController@store'); //新增权限
         Route::put('/authority/{id}', 'V1\Backstage\AuthorityController@update'); //更新权限
         Route::delete('/authority', 'V1\Backstage\AuthorityController@destroy'); //删除权限
+        Route::get('/authority/parent', 'V1\Backstage\AuthorityController@parentData'); //父级权限列表
     });
 });
 //});

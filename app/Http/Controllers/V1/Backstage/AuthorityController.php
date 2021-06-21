@@ -68,4 +68,9 @@ class AuthorityController extends Controller
         }
         return AuthorityServiceFacade::destroy($ids);
     }
+
+    public function parentData()
+    {
+        return AuthorityServiceFacade::parentData();
+    }
 }

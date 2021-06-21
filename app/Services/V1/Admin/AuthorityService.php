@@ -45,4 +45,10 @@ class AuthorityService
         }
         return HelperCommon::reset([], 0, 0);
     }
+
+    public function parentData()
+    {
+        $result = AdminAuthorityFacade::getParent();
+        return HelperCommon::reset($result, 0, 0);
+    }
 }
