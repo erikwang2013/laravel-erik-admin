@@ -17,7 +17,10 @@ class AdminValidation
                 'real_name' => 'regex:/^[一-龥]{0,}$/|min:2|max:6',
                 'sex' => 'in:0,1'
             ],
-            'messages' => [],
+            'messages' => [
+                'nick_name' => trans('admin.nick_name_fail'),
+                'real_name' => trans('admin.real_name_fail')
+            ],
         ];
     }
 
@@ -38,7 +41,10 @@ class AdminValidation
                 'day' => 'numeric|between:1,31|required',
                 'img' => 'image|size:50'
             ],
-            'messages' => [],
+            'messages' => [
+                'nick_name' => trans('admin.nick_name_fail'),
+                'real_name' => trans('admin.real_name_fail')
+            ],
         ];
     }
 
@@ -59,7 +65,10 @@ class AdminValidation
                 'day' => 'numeric|between:1,31',
                 'img' => 'image|size:50'
             ],
-            'messages' => [],
+            'messages' => [
+                'nick_name' => trans('admin.nick_name_fail'),
+                'real_name' => trans('admin.real_name_fail')
+            ],
         ];
     }
 }
