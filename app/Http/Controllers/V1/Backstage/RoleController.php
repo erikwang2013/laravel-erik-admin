@@ -63,20 +63,23 @@ class RoleController extends Controller
         if (!BaseValidationFacade::validateRequest($request, 'update')) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
-        $authority_id = explode(',', $params['authority_id']);
-        foreach ($authority_id as $k => $v) {
-            $validator = Validator::make(['authority_id' => $v], ['authority_id' => 'size:19|required']);
-            if ($validator->fails()) {
-                return HelperCommon::reset([], 0, 1, $validator->errors());
+        if (isset($params['authority_id'])) {
+            $authority_id = explode(',', $params['authority_id']);
+            foreach ($authority_id as $k => $v) {
+                $validator = Validator::make(['authority_id' => $v], ['authority_id' => 'size:19|required']);
+                if ($validator->fails()) {
+                    return HelperCommon::reset([], 0, 1, $validator->errors());
+                }
             }
+            $params['authority_id'] = $authority_id;
         }
-        $params['authority_id'] = $authority_id;
         unset($params['id']);
         return RoleServiceFacade::update($params, $id);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->input('id');
         $ids = explode(',', $id);
         foreach ($ids as $k => $v) {
             $validator = Validator::make(['id' => $v], ['id' => 'numeric|min:19|required']);

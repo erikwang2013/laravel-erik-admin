@@ -65,4 +65,8 @@ class AdminRoleAuthority extends Model
     {
         return $this->insert($data);
     }
+    public function deleteAll($id)
+    {
+        return $this->whereIn('role_id', $id)->delete();
+    }
 }

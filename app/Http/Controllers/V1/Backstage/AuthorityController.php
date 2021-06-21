@@ -56,8 +56,9 @@ class AuthorityController extends Controller
         return AuthorityServiceFacade::update($params, $id);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->input('id');
         $ids = explode(',', $id);
         foreach ($ids as $k => $v) {
             $validator = Validator::make(['id' => $v], ['id' => 'numeric|min:19|required']);

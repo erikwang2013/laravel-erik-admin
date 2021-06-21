@@ -34,8 +34,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/role', 'V1\Backstage\RoleController@index');  //角色列表
         Route::post('/role', 'V1\Backstage\RoleController@store'); //新增角色
-        Route::put('/role', 'V1\Backstage\RoleController@update');  //更新角色
-        Route::delete('/role', 'V1\Backstage\oleController@destroy'); //删除角色
+        Route::put('/role/{id}', 'V1\Backstage\RoleController@update');  //更新角色
+        Route::delete('/role', 'V1\Backstage\RoleController@destroy'); //删除角色
     });
 });
 //});

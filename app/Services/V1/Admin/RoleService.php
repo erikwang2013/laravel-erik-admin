@@ -56,19 +56,63 @@ class RoleService
     {
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
-        $result = AdminRoleInfoFacade::updateData($data, $id);
-        if (!$result) {
-            return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+        try {
+            DB::beginTransaction();
+            $result = AdminRoleInfoFacade::updateData($data, $id);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+            if (isset($params['authority_id'])) {
+                //拆分数据，重新组合
+                $authority_id = $params['authority_id'];
+                $data_authority = [];
+                foreach ($authority_id as $k => $v) {
+                    $data_authority[] = [
+                        'role_id' => $params['id'],
+                        'authority_id' => $v
+                    ];
+                }
+                //删除角色关联的权限
+                $delete = AdminRoleAuthorityFacade::deleteAll($params['id']);
+                if (!$delete) {
+                    DB::rollBack();
+                    return  HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
+                //重新增加角色关联权限
+                $result_authority = AdminRoleAuthorityFacade::storeAll($data_authority);
+                if (!$result_authority) {
+                    DB::rollBack();
+                    return  HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
+            }
+            DB::commit();
+            return HelperCommon::reset([], 0, 0);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return HelperCommon::reset([], 0, 1, $e->getMessage());
         }
-        return HelperCommon::reset([], 0, 0);
     }
 
     public function destroy($id)
     {
-        $result = AdminRoleInfoFacade::deleteAll($id);
-        if (!$result) {
-            return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
+        try {
+            DB::beginTransaction();
+            $result = AdminRoleInfoFacade::deleteAll($id);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
+            }
+            $result_authority = AdminRoleAuthorityFacade::deleteAll($id);
+            if (!$result_authority) {
+                DB::rollBack();
+                return  HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
+            }
+            DB::commit();
+            return HelperCommon::reset([], 0, 0);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return HelperCommon::reset([], 0, 1, $e->getMessage());
         }
-        return HelperCommon::reset([], 0, 0);
     }
 }

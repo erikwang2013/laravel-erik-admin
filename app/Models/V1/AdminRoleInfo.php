@@ -106,4 +106,12 @@ class AdminRoleInfo extends Model
     {
         return $this->create($data);
     }
+    public function updateData($data, $id)
+    {
+        return $this->where('id', $id)->update($data);
+    }
+    public function deleteAll($id)
+    {
+        return $this->whereIn('id', $id)->delete();
+    }
 }
