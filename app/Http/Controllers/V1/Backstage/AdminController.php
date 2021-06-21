@@ -93,4 +93,52 @@ class AdminController extends Controller
         }
         return AdminServiceFacade::destroy($ids);
     }
+
+
+    public function roleStore(Request $request)
+    {
+        $params = $request->input();
+        //校验数据
+        if (!BaseValidationFacade::validateRequest($request, 'roleStore')) {
+            return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
+        }
+        if ($params['authority'] == 1) {
+            $ids = explode(',', $params['role_id']);
+            foreach ($ids as $k => $v) {
+                $validator = Validator::make(['role_id' => $v], ['role_id' => 'size:19|required']);
+                if ($validator->fails()) {
+                    return HelperCommon::reset([], 0, 1, $validator->errors());
+                }
+            }
+            $params['roles'] = $ids;
+            unset($params['role_id']);
+        }
+        return AdminServiceFacade::roleStore($params);
+    }
+
+    public function roleUpdate(Request $request, $id)
+    {
+        $params = $request->input();
+        $params['id'] = $id;
+        //校验数据
+        if (!BaseValidationFacade::validateRequest($request, 'roleUpdate')) {
+            return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
+        }
+        if ($params['authority'] == 1) {
+            $ids = explode(',', $params['role_id']);
+            foreach ($ids as $k => $v) {
+                $validator = Validator::make(['role_id' => $v], ['role_id' => 'size:19|required']);
+                if ($validator->fails()) {
+                    return HelperCommon::reset([], 0, 1, $validator->errors());
+                }
+            }
+            $params['roles'] = $ids;
+            unset($params['role_id']);
+        }
+        return AdminServiceFacade::roleUpdate($params);
+    }
+
+    public function roleDestroy(Request $request)
+    {
+    }
 }

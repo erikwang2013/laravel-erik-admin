@@ -35,4 +35,49 @@ class AdminRole extends Model
     {
         return ['admin_id', 'role_id'];
     }
+
+    /**
+     * 批量新增
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @return void
+     */
+    public function storeAll($data)
+    {
+        return $this->insert($data);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
+    public function deleteAll($id)
+    {
+        return $this->whereIn('admin_id', $id)->delete();
+    }
+
+    /**
+     * 单个删除
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
+    public function deleteOne($id)
+    {
+        return $this->where('admin_id', $id)->delete();
+    }
 }

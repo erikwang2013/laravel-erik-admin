@@ -17,7 +17,8 @@ class Admin extends Model
     protected $casts = [
         'id' => 'string',
         'phone' => 'int',
-        'status' => 'int'
+        'status' => 'int',
+        'authority' => 'int'
     ];
 
     protected $hidden = [
@@ -35,7 +36,8 @@ class Admin extends Model
         'phone',
         'email',
         'status',
-        'access_token'
+        'access_token',
+        'authority'
     ];
 
     /**
@@ -262,5 +264,10 @@ class Admin extends Model
             return true;
         }
         return false;
+    }
+
+    public function getFirstData($id)
+    {
+        return $this->where('id', $id)->first();
     }
 }

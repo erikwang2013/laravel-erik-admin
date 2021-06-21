@@ -65,6 +65,17 @@ class AdminRoleAuthority extends Model
     {
         return $this->insert($data);
     }
+
+    /**
+     * 批量删除
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
     public function deleteAll($id)
     {
         return $this->whereIn('role_id', $id)->delete();

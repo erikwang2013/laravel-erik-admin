@@ -4,6 +4,7 @@ namespace App\Services\V1\Admin;
 
 use App\Support\Facades\V1\Models\AdminFacade,
     App\Support\Facades\V1\Models\AdminInfoFacade,
+    App\Support\Facades\V1\Models\AdminRoleFacade,
     App\Common\HelperCommon,
     Illuminate\Support\Facades\DB,
     Exception;
@@ -136,6 +137,110 @@ class AdminService
             return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
         }
         DB::commit();
+        return HelperCommon::reset([], 0, 0);
+    }
+
+    /**
+     * 新增管理员角色
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $params
+     * @return void
+     */
+    public function roleStore($params)
+    {
+        $first = AdminFacade::getFirstData($params['id']);
+        //不是超级管理员
+        if ($params['authority'] == 1) {
+            DB::beginTransaction();
+            $role = [];
+            foreach ($params['roles'] as $k => $v) {
+                $role[] = [
+                    'admin_id' => $params['id'],
+                    'role_id' => $v,
+                ];
+            }
+            unset($params['roles']);
+            unset($k);
+            unset($v);
+            $result =  AdminRoleFacade::storeAll($role);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+
+            if ($first->authority == 0) {
+                $result = AdminFacade::updateData(['authority' => 1], $params['id']);
+                if (!$result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
+            }
+            DB::commit();
+        } else if ($first->authority == 1) {
+            $result = AdminFacade::updateData(['authority' => 0], $params['id']);
+            if (!$result) {
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+        }
+        return HelperCommon::reset([], 0, 0);
+    }
+
+    /**
+     * 更新管理员角色
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $params
+     * @return void
+     */
+    public function roleUpdate($params)
+    {
+        $first = AdminFacade::getFirstData($params['id']);
+        //不是超级管理员
+        if ($params['authority'] == 1) {
+            DB::beginTransaction();
+            $role = [];
+            foreach ($params['roles'] as $k => $v) {
+                $role[] = [
+                    'admin_id' => $params['id'],
+                    'role_id' => $v,
+                ];
+            }
+            unset($params['roles']);
+            unset($k);
+            unset($v);
+            $delete = AdminRoleFacade::deleteOne($params['id']);
+            if ($delete == false) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+
+            $result =  AdminRoleFacade::storeAll($role);
+            if (!$result) {
+                DB::rollBack();
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+
+            if ($first->authority == 0) {
+                $result = AdminFacade::updateData(['authority' => 1], $params['id']);
+                if (!$result) {
+                    DB::rollBack();
+                    return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+                }
+            }
+            DB::commit();
+        } else if ($first->authority == 1) {
+            $result = AdminFacade::updateData(['authority' => 0], $params['id']);
+            if (!$result) {
+                return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
+            }
+        }
         return HelperCommon::reset([], 0, 0);
     }
 }

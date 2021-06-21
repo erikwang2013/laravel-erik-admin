@@ -71,4 +71,35 @@ class AdminValidation
             ],
         ];
     }
+
+    public function roleStore()
+    {
+        return [
+            'rules' => [
+                'id' => 'size:19|required',
+                'authority' => 'in:0,1|required',
+                'role_id' => 'required'
+            ],
+            'messages' => []
+        ];
+    }
+
+    public function roleUpdate()
+    {
+        return [
+            'rules' => [
+                'id' => 'size:19',
+                'authority' => 'in:0,1'
+            ],
+            'messages' => []
+        ];
+    }
+
+    public function roleDestroy()
+    {
+        return [
+            'rules' => [],
+            'messages' => []
+        ];
+    }
 }

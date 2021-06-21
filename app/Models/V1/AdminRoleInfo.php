@@ -106,10 +106,33 @@ class AdminRoleInfo extends Model
     {
         return $this->create($data);
     }
+
+    /**
+     * 批量更新
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @param [type] $id
+     * @return void
+     */
     public function updateData($data, $id)
     {
         return $this->where('id', $id)->update($data);
     }
+
+    /**
+     * 批量删除
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
     public function deleteAll($id)
     {
         return $this->whereIn('id', $id)->delete();
