@@ -41,10 +41,20 @@ class AdminAuthority extends Model
         return ['id', 'parent_id', 'name', 'show', 'status'];
     }
 
+    /**
+     * 获取父级权限数据
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @return void
+     */
     public function getParent()
     {
         return $this->select('id', 'parent_id', 'name')->get()->toArray();
     }
+
     public function search($page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
@@ -96,11 +106,47 @@ class AdminAuthority extends Model
         ];
     }
 
+    /**
+     * 新增
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @return void
+     */
+    public function create($data)
+    {
+        return $this->create($data);
+    }
+
+    /**
+     * 更新
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @param [type] $id
+     * @return void
+     */
     public function updateData($data, $id)
     {
         return $this->where('id', $id)->update($data);
     }
 
+    /**
+     * 删除
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
     public function deleteAll($id)
     {
         return $this->whereIn('id', $id)->destroy();
