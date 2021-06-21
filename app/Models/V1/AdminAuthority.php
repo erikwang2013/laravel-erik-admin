@@ -169,4 +169,19 @@ class AdminAuthority extends Model
     {
         return $this->whereIn('id', $id)->delete();
     }
+
+    /**
+     * 获取关联权限
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $id
+     * @return void
+     */
+    public function getData($id)
+    {
+        return $this->select('id', 'name')->where(['status' => 0, 'show' => 0])->whereIn('id', $id)->get();
+    }
 }

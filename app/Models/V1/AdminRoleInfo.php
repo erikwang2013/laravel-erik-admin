@@ -2,7 +2,8 @@
 
 namespace App\Models\V1;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model,
+    App\Support\Facades\V1\Models\AdminAuthorityFacade;
 
 class AdminRoleInfo extends Model
 {
@@ -38,6 +39,59 @@ class AdminRoleInfo extends Model
         return ['id', 'name', 'status', 'create_time'];
     }
 
+    public function authorityId()
+    {
+        return $this->hasMany('App\Models\V1\AdminRoleAuthority', 'role_id', 'id');
+    }
+    public function search($page, $limit, $params = [])
+    {
+        $page = ceil($page - 1) / $limit;
+        $model = $this->where(function ($model) use ($params) {
+            if (count($params) > 0) {
+                foreach ($params as $k => $v) {
+                    switch ($k) {
+                        case 'id':
+                            $model->where($k, $v);
+                        case 'create_time':
+                            $model->where($k, '>=', $v[0]);
+                            $model->where($k, '<=', $v[1]);
+                            break;
+                        case 'status':
+                            $model->where($k, $v);
+                            break;
+                        default:
+                            $model->where($k, 'like', $v . '%');
+                            break;
+                    }
+                }
+            }
+        })->with('authorityId');
+        $count = $model->count();
+        $result = $model->offset($page)->limit($limit)->get()->toArray();
+        foreach ($result as $m => $n) {
+            $authority = [];
+            if (count($n['authority_id']) > 0) {
+                foreach ($n['authority_id'] as $k => $v) {
+                    $authority[] = $v['authority_id'];
+                }
+            }
+            $authority_data = count($authority) > 0 ? AdminAuthorityFacade::getData($authority) : [];
+            $result[$m] = [
+                'id' => $n['id'],
+                'name' => $n['name'],
+                'authority' => $authority_data,
+                'status' => [
+                    'key' => $n['status'],
+                    'value' => $n['status'] ? trans('admin.status_off') : trans('admin.status_on')
+                ],
+                'create_time' => $n['create_time']
+            ];
+        }
+        return [
+            'list' => $result,
+            'count' => $count
+        ];
+    }
     /**
      * 新增角色
      *

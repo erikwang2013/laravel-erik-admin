@@ -9,10 +9,10 @@ class RoleValidation
         return [
             'rules' => [
                 'id' => 'numeric|size:19',
-                'parent_id' => 'numeric|min:0|max:19',
                 'status' => 'in:1,0',
-                'show' => 'in:1,0',
-                'name' => 'alpha_dash|min:2|max:10'
+                'name' => 'alpha_dash|min:2|max:10',
+                'start_time' => 'date_format:Y-m-d H:i:s',
+                'end_time' => 'date_format:Y-m-d H:i:s'
             ],
             'messages' => []
         ];
@@ -22,7 +22,8 @@ class RoleValidation
     {
         return [
             'rules' => [
-                'name' => 'alpha_dash|min:2|max:10|required'
+                'name' => 'alpha_dash|min:2|max:10|required',
+                'status' => 'in:1,0|required',
             ],
             'messages' => []
         ];
@@ -32,10 +33,7 @@ class RoleValidation
     {
         return [
             'rules' => [
-                'parent_id' => 'numeric|min:0|max:19',
                 'status' => 'in:1,0',
-                'show' => 'in:1,0',
-                'code' => 'alpha_dash',
                 'name' => 'alpha_dash|min:2|max:10'
             ],
             'messages' => []
