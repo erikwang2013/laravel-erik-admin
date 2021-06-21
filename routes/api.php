@@ -28,7 +28,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/authority', 'V1\Backstage\AuthorityController@index');  //权限列表
         Route::post('/authority', 'V1\Backstage\AuthorityController@store'); //新增权限
-        Route::put('/authority', 'V1\Backstage\AuthorityController@update'); //更新权限
+        Route::put('/authority/{id}', 'V1\Backstage\AuthorityController@update'); //更新权限
         Route::delete('/authority', 'V1\Backstage\AuthorityController@destroy'); //删除权限
     });
 });

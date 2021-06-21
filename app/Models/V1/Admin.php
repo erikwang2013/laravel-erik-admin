@@ -5,8 +5,7 @@ namespace App\Models\V1;
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
     Illuminate\Support\Facades\Hash,
-    Illuminate\Support\Str,
-    App\Common\HelperCommon;
+    Illuminate\Support\Str;
 
 class Admin extends Model
 {
@@ -145,7 +144,7 @@ class Admin extends Model
      */
     public function createUpdateData($data, $id = '')
     {
-        if ($id > 0) {
+        if (!empty($id)) {
             $this->where('id', $id);
         }
         return $this->save($data);

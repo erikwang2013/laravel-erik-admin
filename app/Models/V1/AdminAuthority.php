@@ -24,7 +24,9 @@ class AdminAuthority extends Model
         'id',
         'parent_id',
         'code',
-        'name'
+        'name',
+        'show',
+        'status'
     ];
 
     /**
@@ -119,7 +121,7 @@ class AdminAuthority extends Model
      */
     public function createUpdateData($data, $id = '')
     {
-        if ($id > 0) {
+        if (!empty($id)) {
             $this->where('id', $id);
         }
         return $this->save($data);

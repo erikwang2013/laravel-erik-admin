@@ -23,6 +23,11 @@ class AdminInfo extends Model
 
     protected $fillable = [
         'id',
+        'sex',
+        'age',
+        'year',
+        'month',
+        'day',
         'real_name',
         'img',
         'create_time',
@@ -43,21 +48,6 @@ class AdminInfo extends Model
         return ['id', 'real_name', 'sex', 'age', 'year', 'month', 'day', 'img', 'create_time', 'update_time'];
     }
 
-    /**
-     * 新增管理员详情
-     *
-     * @Author erik
-     * @Email erik@erik.xyz
-     * @Url https://erik.xyz
-     * @DateTime 2021-04-19 15:26:20
-     * @param [type] $data
-     * @return void
-     */
-    public function create($data)
-    {
-        $result = $this->create($data);
-        return $result;
-    }
 
     /**
      * 更新管理员详情
@@ -72,7 +62,7 @@ class AdminInfo extends Model
      */
     public function createUpdateData($data, $id = '')
     {
-        if ($id > 0) {
+        if (!empty($id)) {
             $this->where('id', $id);
         }
         return $this->save($data);
