@@ -48,7 +48,10 @@ class AdminInfo extends Model
         return ['id', 'real_name', 'sex', 'age', 'year', 'month', 'day', 'img', 'create_time', 'update_time'];
     }
 
-
+    public function store($data)
+    {
+        return $this->create($data);
+    }
     /**
      * 更新管理员详情
      *
@@ -60,13 +63,11 @@ class AdminInfo extends Model
      * @param [type] $id
      * @return void
      */
-    public function createUpdateData($data, $id = '')
+    public function updateData($data, $id)
     {
-        if (!empty($id)) {
-            $this->where('id', $id);
-        }
-        return $this->save($data);
+        return $this->where('id', $id)->update($data);
     }
+
 
     public function deleteAll($id)
     {

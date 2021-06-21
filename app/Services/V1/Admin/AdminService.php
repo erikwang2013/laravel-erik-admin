@@ -38,14 +38,14 @@ class AdminService
      */
     public function store($params)
     {
-        $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0, 'store');
+        $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
         $data['hash'] = AdminFacade::setPassword($params['password']);
         $data['password'] = $params['password'];
         try {
             DB::beginTransaction();
             if (count($admin_data) == 0) {
-                $result = AdminFacade::createUpdateData($data);
+                $result = AdminFacade::store($data);
                 if (!$result) {
                     DB::rollBack();
                     return HelperCommon::reset([], 0, 1, trans('public.create_data_fail'));
@@ -55,7 +55,7 @@ class AdminService
                 if ($info_data['year']) {
                     $info_data['age'] = (date('Y') - $info_data['year']) + 1;
                 }
-                $info_result = AdminInfoFacade::createUpdateData($info_data);
+                $info_result = AdminInfoFacade::store($info_data);
                 if (!$info_result) {
                     DB::rollBack();
                     return HelperCommon::reset([], 0, 1, trans('public.create_data_fail'));
@@ -87,7 +87,7 @@ class AdminService
         try {
             DB::beginTransaction();
             if (count($admin_data) > 0) {
-                $result = AdminFacade::createUpdateData($admin_data, $id);
+                $result = AdminFacade::updateData($admin_data, $id);
                 if (!$result) {
                     DB::rollBack();
                     return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
@@ -98,7 +98,7 @@ class AdminService
                 if ($info_data['year']) {
                     $info_data['age'] = (date('Y') - $info_data['year']) + 1;
                 }
-                $info_result = AdminInfoFacade::createUpdateData($info_data, $id);
+                $info_result = AdminInfoFacade::updateData($info_data, $id);
                 if (!$info_result) {
                     DB::rollBack();
                     return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));

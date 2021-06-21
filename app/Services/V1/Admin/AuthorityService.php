@@ -18,8 +18,8 @@ class AuthorityService
     public function store($params)
     {
         //过滤存在的数据
-        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0, 'store');
-        $result = AdminAuthorityFacade::createUpdateData($data);
+        $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
+        $result = AdminAuthorityFacade::store($data);
         if (!$result) {
             return  HelperCommon::reset([], 0, 1, trans('public.create_data_fail'));
         }
@@ -30,7 +30,7 @@ class AuthorityService
     {
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
-        $result = AdminAuthorityFacade::createUpdateData($data, $id);
+        $result = AdminAuthorityFacade::updateData($data, $id);
         if (!$result) {
             return HelperCommon::reset([], 0, 1, trans('public.update_data_fail'));
         }

@@ -130,7 +130,10 @@ class Admin extends Model
             'count' => $count
         ];
     }
-
+    public function store($data)
+    {
+        return $this->create($data);
+    }
     /**
      * 更新管理员
      *
@@ -142,12 +145,9 @@ class Admin extends Model
      * @param [type] $id
      * @return void
      */
-    public function createUpdateData($data, $id = '')
+    public function updateData($data, $id)
     {
-        if (!empty($id)) {
-            $this->where('id', $id);
-        }
-        return $this->save($data);
+        return $this->where('id', $id)->update($data);
     }
 
     public function deleteAll($id)

@@ -3,8 +3,9 @@
 namespace App\Models\V1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory,
+    App\Common\HelperCommon,
     Illuminate\Database\Eloquent\Model,
-    App\Common\HelperCommon;
+    Illuminate\Support\Facades\Log;
 
 class AdminAuthority extends Model
 {
@@ -110,6 +111,10 @@ class AdminAuthority extends Model
         ];
     }
 
+    public function store($data)
+    {
+        return $this->create($data);
+    }
     /**
      * 更新
      *
@@ -121,12 +126,9 @@ class AdminAuthority extends Model
      * @param [type] $id
      * @return void
      */
-    public function createUpdateData($data, $id = '')
+    public function updateData($data, $id)
     {
-        if (!empty($id)) {
-            $this->where('id', $id);
-        }
-        return $this->save($data);
+        return $this->where('id', $id)->update($data);
     }
 
     /**
