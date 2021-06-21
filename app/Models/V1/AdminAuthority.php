@@ -60,6 +60,30 @@ class AdminAuthority extends Model
         return $this->select('id', 'parent_id', 'name')->get()->toArray();
     }
 
+    /**
+     * 获取不显示且未禁止的权限
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @return void
+     */
+    public function getLoginAuthority()
+    {
+        $result = $this->where(['show' => 0, 'status' => 0])->get();
+        $parent =  HelperCommon::array_keys_header($this->getParent(), 'id');
+        foreach ($result as $m => $n) {
+            $result[$m] = [
+                'id' => $n['id'],
+                'parent_id' => $n['parent_id'],
+                'parent_name' => $n['parent_id'] == 0 ? trans('admin.authority_top') : $parent[$n['parent_id']]['name'],
+                'code' => $n['code'],
+                'name' => $n['name']
+            ];
+        }
+        return $result;
+    }
     public function search($page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
