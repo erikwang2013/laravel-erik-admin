@@ -8,8 +8,8 @@ class AuthorityValidation
     {
         return [
             'rules' => [
-                'id' => 'numeric|min:19',
-                'parent_id' => 'numeric|size:19',
+                'id' => 'numeric|size:19',
+                'parent_id' => 'numeric|min:0|max:19',
                 'status' => 'in:1,0',
                 'show' => 'in:1,0',
                 'name' => 'alpha_dash|min:2|max:10'
@@ -22,7 +22,7 @@ class AuthorityValidation
     {
         return [
             'rules' => [
-                'parent_id' => 'numeric|size:19',
+                'parent_id' => 'numeric|min:0|max:19',
                 'status' => 'in:1,0',
                 'show' => 'in:1,0',
                 'code' => 'required|alpha_dash',
@@ -36,7 +36,7 @@ class AuthorityValidation
     {
         return [
             'rules' => [
-                'parent_id' => 'numeric|size:19',
+                'parent_id' => 'numeric|min:0|max:19',
                 'status' => 'in:1,0',
                 'show' => 'in:1,0',
                 'code' => 'alpha_dash',

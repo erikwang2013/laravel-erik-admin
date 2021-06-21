@@ -38,7 +38,7 @@ class AdminAuthority extends Model
      */
     public function findWhere()
     {
-        return ['id', 'parent_id', 'name', 'show', 'status'];
+        return ['id', 'parent_id', 'name', 'show', 'status', 'code'];
     }
 
     /**
@@ -107,34 +107,22 @@ class AdminAuthority extends Model
     }
 
     /**
-     * 新增
-     *
-     * @Author erik
-     * @Email erik@erik.xyz
-     * @address https://erik.xyz
-     * @Date 2021-06-21
-     * @param [type] $data
-     * @return void
-     */
-    public function create($data)
-    {
-        return $this->create($data);
-    }
-
-    /**
      * 更新
      *
      * @Author erik
      * @Email erik@erik.xyz
      * @address https://erik.xyz
      * @Date 2021-06-21
-     * @param [type] $data
+     * @param array $data
      * @param [type] $id
      * @return void
      */
-    public function updateData($data, $id)
+    public function createUpdateData($data, $id = '')
     {
-        return $this->where('id', $id)->update($data);
+        if ($id > 0) {
+            $this->where('id', $id);
+        }
+        return $this->save($data);
     }
 
     /**

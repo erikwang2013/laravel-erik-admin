@@ -5,7 +5,8 @@ namespace App\Models\V1;
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
     Illuminate\Support\Facades\Hash,
-    Illuminate\Support\Str;
+    Illuminate\Support\Str,
+    App\Common\HelperCommon;
 
 class Admin extends Model
 {
@@ -132,34 +133,22 @@ class Admin extends Model
     }
 
     /**
-     * 新增管理员
-     *
-     * @Author erik
-     * @Email erik@erik.xyz
-     * @Url https://erik.xyz
-     * @DateTime 2021-04-19 15:00:25
-     * @param [type] $data
-     * @return void
-     */
-    public function create($data)
-    {
-        return $this->create($data);
-    }
-
-    /**
      * 更新管理员
      *
      * @Author erik
      * @Email erik@erik.xyz
      * @Url https://erik.xyz
      * @DateTime 2021-04-22 17:56:51
-     * @param [type] $data
+     * @param array $data
      * @param [type] $id
      * @return void
      */
-    public function updateData($data, $id)
+    public function createUpdateData($data, $id = '')
     {
-        return $this->where('id', $id)->update($data);
+        if ($id > 0) {
+            $this->where('id', $id);
+        }
+        return $this->save($data);
     }
 
     public function deleteAll($id)

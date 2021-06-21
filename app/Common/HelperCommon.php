@@ -16,12 +16,21 @@ class HelperCommon
      * @param [type] $model
      * @param [type] $data 请求数据
      * @param integer $status 0返回数组 1覆盖对象
+     * @param [type] 筛选类型
      * @return void|array
      */
-    public static function filterKey($model, $data, $status = 1)
+    public static function filterKey($model, $data, $status = 1, $type = '')
     {
+        $attributes = $model::findWhere();
+        //新增的时候删除id
+        if (strcmp($type, 'store') == 0) {
+            $key = array_search('id', $attributes);
+            if (false !== $key) {
+                unset($attributes[$key]);
+            }
+        }
+
         if ($status == 0) {
-            $attributes = $model::findWhere();
             $data_info = [];
             foreach ($data as $name => $value) {
                 if (in_array($name, $attributes)) {
@@ -30,12 +39,12 @@ class HelperCommon
             }
             return $data_info;
         } else {
-            $attributes = $model::findWhere();
             foreach ($data as $name => $value) {
                 if (in_array($name, $attributes)) {
                     $model::$name = $value;
                 }
             }
+            return $model;
         }
     }
     /**

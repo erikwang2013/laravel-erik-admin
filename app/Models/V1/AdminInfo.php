@@ -66,13 +66,16 @@ class AdminInfo extends Model
      * @Email erik@erik.xyz
      * @Url https://erik.xyz
      * @DateTime 2021-04-22 17:59:16
-     * @param [type] $data
+     * @param array $data
      * @param [type] $id
      * @return void
      */
-    public function updateData($data, $id)
+    public function createUpdateData($data, $id = '')
     {
-        return $this->where('id', $id)->update($data);
+        if ($id > 0) {
+            $this->where('id', $id);
+        }
+        return $this->save($data);
     }
 
     public function deleteAll($id)
