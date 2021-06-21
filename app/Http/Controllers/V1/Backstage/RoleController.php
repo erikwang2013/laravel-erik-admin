@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\V1\Backstage;
 
-use App\Http\Controllers\Controller,
-    App\Support\Facades\V1\Models\BaseValidationFacade,
-    App\Common\HelperCommon,
+use  App\Http\Controllers\Controller,
     Illuminate\Http\Request,
+    App\Common\HelperCommon,
     Illuminate\Support\Facades\Validator,
-    App\Support\Facades\V1\Services\AuthorityServiceFacade;
+    App\Support\Facades\V1\Models\BaseValidationFacade,
+    App\Support\Facades\V1\Services\RoleServiceFacade;
 
-class AuthorityController extends Controller
+class RoleController extends Controller
 {
     public function index(Request $request)
     {
@@ -27,7 +27,7 @@ class AuthorityController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
 
-        return AuthorityServiceFacade::index($params, $pageData);
+        return RoleServiceFacade::index($params, $pageData);
     }
 
     public function store(Request $request)
@@ -41,7 +41,7 @@ class AuthorityController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
-        return AuthorityServiceFacade::store($params);
+        return RoleServiceFacade::store($params);
     }
 
     public function update(Request $request, $id)
@@ -53,7 +53,7 @@ class AuthorityController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
         unset($params['id']);
-        return AuthorityServiceFacade::update($params, $id);
+        return RoleServiceFacade::update($params, $id);
     }
 
     public function destroy($id)
@@ -65,11 +65,6 @@ class AuthorityController extends Controller
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }
         }
-        return AuthorityServiceFacade::destroy($ids);
-    }
-
-    public function parentData()
-    {
-        return AuthorityServiceFacade::parentData();
+        return RoleServiceFacade::destroy($ids);
     }
 }
