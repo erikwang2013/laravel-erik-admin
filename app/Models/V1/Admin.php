@@ -152,7 +152,7 @@ class Admin extends Model
 
     public function deleteAll($id)
     {
-        return $this->whereIn('id', $id)->destroy();
+        return $this->whereIn('id', $id)->delete();
     }
     /**
      * 密码加密

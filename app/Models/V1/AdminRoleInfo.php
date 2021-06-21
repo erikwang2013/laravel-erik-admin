@@ -18,6 +18,8 @@ class AdminRoleInfo extends Model
     protected $hidden = [];
 
     protected $fillable = [
+        'id',
+        'status',
         'name',
         'create_time'
     ];
@@ -34,5 +36,20 @@ class AdminRoleInfo extends Model
     public function findWhere()
     {
         return ['id', 'name', 'status', 'create_time'];
+    }
+
+    /**
+     * 新增角色
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @return void
+     */
+    public function store($data)
+    {
+        return $this->create($data);
     }
 }

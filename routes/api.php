@@ -31,6 +31,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/authority/{id}', 'V1\Backstage\AuthorityController@update'); //更新权限
         Route::delete('/authority', 'V1\Backstage\AuthorityController@destroy'); //删除权限
         Route::get('/authority/parent', 'V1\Backstage\AuthorityController@parentData'); //父级权限列表
+
+        Route::get('/role', 'V1\Backstage\RoleController@index');  //角色列表
+        Route::post('/role', 'V1\Backstage\RoleController@store'); //新增角色
+        Route::put('/role', 'V1\Backstage\RoleController@update');  //更新角色
+        Route::delete('/role', 'V1\Backstage\oleController@destroy'); //删除角色
     });
 });
 //});

@@ -81,11 +81,12 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->input('id');
         $ids = explode(',', $id);
         foreach ($ids as $k => $v) {
-            $validator = Validator::make(['id' => $v], ['id' => 'numeric|min:19|required']);
+            $validator = Validator::make(['id' => $v], ['id' => 'size:19|required']);
             if ($validator->fails()) {
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }

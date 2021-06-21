@@ -38,6 +38,14 @@ class RoleController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
 
+        $authority_id = explode(',', $params['authority_id']);
+        foreach ($authority_id as $k => $v) {
+            $validator = Validator::make(['authority_id' => $v], ['authority_id' => 'size:19|required']);
+            if ($validator->fails()) {
+                return HelperCommon::reset([], 0, 1, $validator->errors());
+            }
+        }
+        $params['authority_id'] = $authority_id;
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;

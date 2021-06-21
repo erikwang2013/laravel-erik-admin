@@ -35,4 +35,34 @@ class AdminRoleAuthority extends Model
     {
         return ['authority_id', 'role_id'];
     }
+
+    /**
+     * 新增
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @return void
+     */
+    public function store($data)
+    {
+        return $this->create($data);
+    }
+
+    /**
+     * 批量新增
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-21
+     * @param [type] $data
+     * @return void
+     */
+    public function storeAll($data)
+    {
+        return $this->insert($data);
+    }
 }
