@@ -55,7 +55,7 @@ class AdminRoleInfo extends Model
      * @return void
      */
     public function roleAuthoritys($id){
-        return $this->whereIn('id',$id)->with('authoritys')->get()->toArray();
+        return $this->whereIn('id',$id)->with('authoritys')->get();
     }
 
     public function search($page, $limit, $params = [])

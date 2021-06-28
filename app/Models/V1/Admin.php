@@ -119,29 +119,29 @@ class Admin extends Model
             //角色id
             $admin_role_ids= count($v['roles'])>0?Arr::pluck($v['roles'], 'pivot.role_id'):[];
            if (count($admin_role_ids)>0) {
-                $authoritys=AdminRoleInfoFacade::roleAuthoritys($admin_role_ids);
+                $authoritys=AdminRoleInfoFacade::roleAuthoritys(array_unique($admin_role_ids));
                 foreach($authoritys as $m=>$n){
-                    $role[$n['id']]=[
-                        'id'=>$n['id'],
-                        'name'=>$n['name'],
+                    $role[$n->id]=[
+                        'id'=>$n->id,
+                        'name'=>$n->name,
                         'status'=>[
-                            'key'=>$n['status'],
-                            'value'=>$n['status']? trans('admin.status_off') : trans('admin.status_on')
+                            'key'=>$n->status,
+                            'value'=>$n->status? trans('admin.status_off') : trans('admin.status_on')
                         ]
                     ];
-                    foreach($n['authoritys'] as $h=>$i){
-                        $authority[$i['id']]=[
-                            'id'=>$i['id'],
-                            'parent_id'=>$i['parent_id'],
-                            'code'=>$i['code'],
-                            'name'=>$i['name'],
+                    foreach($n->authoritys as $h=>$i){
+                        $authority[$i->id]=[
+                            'id'=>$i->id,
+                            'parent_id'=>$i->parent_id,
+                            'code'=>$i->code,
+                            'name'=>$i->name,
                             'show'=>[
-                                'key'=>$i['show'],
-                                'value'=>$i['show']? trans('admin.show_off') : trans('admin.show_on')
+                                'key'=>$i->show,
+                                'value'=>$i->show? trans('admin.show_off') : trans('admin.show_on')
                             ],
                             'status'=>[
-                                'key'=>$i['status'],
-                                'value'=>$i['status']? trans('admin.status_off') : trans('admin.status_on')
+                                'key'=>$i->status,
+                                'value'=>$i->status? trans('admin.status_off') : trans('admin.status_on')
                             ],
                         ];
                     }
@@ -250,12 +250,43 @@ class Admin extends Model
     public function getPassword(string $username)
     {
         if (preg_match('/^[1][3456789][0-9]{9}$/', $username)) {
-            $result = $this->where('phone', $username)->first();
+            $result = $this->where('phone', $username)->with('roles')->first();
         } elseif (preg_match('/^[a-z0-9A-Z]+[- | a-z0-9A-Z . _]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$/', $username)) {
-            $result = $this->where('email', $username)->first();
+            $result = $this->where('email', $username)->with('roles')->first();
         } else {
-            $result = $this->where('name', $username)->first();
+            $result = $this->where('name', $username)->with('roles')->first();
         }
+        $role_ids=[];
+        foreach($result->roles as $k=>$v){
+            if($v->status==0){
+                $role_ids[]=$v->id;
+            }
+        }
+        $authority=[];
+        if (count($role_ids)>0) {
+            $authoritys=AdminRoleInfoFacade::roleAuthoritys(array_unique($role_ids));
+            foreach ($authoritys as $f=>$g) {
+                foreach($g->authoritys as $m=>$n){
+                    if($n->show==1){
+                        continue;
+                    }
+                    if($n->status==1){
+                        continue;
+                    }
+                    $authority[]=[
+                        'id'=>$n->id,
+                        'parent_id'=>$n->parent_id,
+                        'code'=>$n->code,
+                        'name'=>$n->name
+                    ];
+                }
+            }
+        }
+        $result->authority_status=[
+            'key'=> $result->authority,
+            'value'=> $result->authority? trans('admin.authority_sort') : trans('admin.authority_hight')
+        ];
+        $result->authority_info=$result->authority==0?[]:$authority;
         return $result;
     }
 

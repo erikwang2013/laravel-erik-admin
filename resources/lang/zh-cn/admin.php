@@ -20,4 +20,7 @@ return [
     'show_on' => '显示',
     'show_off' => '隐藏',
     'authority_top' => '顶级',
+    'authority_hight'=>'超级管理员',
+    'authority_sort'=>'普通管理员',
+
 ];
