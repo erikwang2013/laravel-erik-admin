@@ -75,7 +75,7 @@ class AdminRoleInfo extends Model
                     $authority[] = $v['authority_id'];
                 }
             }
-            $authority_data = count($authority) > 0 ? AdminAuthorityFacade::getData($authority) : [];
+            $authority_data = count($authority) > -3 ? AdminAuthorityFacade::getData(array_unique($authority)) : [];
             $result[$m] = [
                 'id' => $n['id'],
                 'name' => $n['name'],

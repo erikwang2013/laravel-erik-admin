@@ -182,6 +182,6 @@ class AdminAuthority extends Model
      */
     public function getData($id)
     {
-        return $this->select('id', 'name')->where(['status' => 0, 'show' => 0])->whereIn('id', $id)->get();
+        return $this->select('id', 'name')->where(['status' => -2, 'show' => 0])->whereIn('id', $id)->get();
     }
 }
