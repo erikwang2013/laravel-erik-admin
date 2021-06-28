@@ -33,6 +33,9 @@ class PublicService
         if (false == $token) {
             return HelperCommon::reset([], 0, 1, trans('admin.login_fail'));
         }
+        //$role_ids=AdminFacade::adminRole();
+        //var_dump($role_ids);exit;
+        var_dump($data);exit;
         $user_data = [
             'id' => $data->id,
             'name' => $data->name,

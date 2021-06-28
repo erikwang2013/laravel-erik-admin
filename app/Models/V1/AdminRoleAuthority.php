@@ -80,4 +80,18 @@ class AdminRoleAuthority extends Model
     {
         return $this->whereIn('role_id', $id)->delete();
     }
+
+    /**
+     * 获取所有权限
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-28
+     * @param [type] $id
+     * @return void
+     */
+    public function getAll($id){
+        return $this->whereIn('role_id', $id)->get();
+    }
 }

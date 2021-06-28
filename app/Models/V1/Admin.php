@@ -5,7 +5,9 @@ namespace App\Models\V1;
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
     Illuminate\Support\Facades\Hash,
-    Illuminate\Support\Str;
+    Illuminate\Support\Str,
+    Illuminate\Support\Arr,
+    App\Support\Facades\V1\Models\AdminRoleInfoFacade;
 
 class Admin extends Model
 {
@@ -68,6 +70,15 @@ class Admin extends Model
         return $this->hasOne('App\Models\V1\AdminInfo', 'id', 'id');
     }
 
+        
+    public function adminRole(){
+        return $this->hasMany('App\Models\V1\AdminRole','admin_id','id');
+    }
+
+    public function roles(){
+        return $this->belongsToMany('App\Models\V1\AdminRoleInfo', 'admin_role', 'admin_id', 'role_id');
+    }
+
 
     /**
      *
@@ -98,14 +109,50 @@ class Admin extends Model
                     }
                 }
             }
-        })->with('infoId');
+        })->with('infoId')->with('roles');
         $count = $model->count();
         $result = $model->offset($page)->limit($limit)->get()->toArray();
         foreach ($result as $k => $v) {
             $info = $v['info_id'];
+            $role=[];
+            $authority=[];
+            //角色id
+            $admin_role_ids= count($v['roles'])>0?Arr::pluck($v['roles'], 'pivot.role_id'):[];
+           if (count($admin_role_ids)>0) {
+                $authoritys=AdminRoleInfoFacade::roleAuthoritys($admin_role_ids);
+                foreach($authoritys as $m=>$n){
+                    $role[$n['id']]=[
+                        'id'=>$n['id'],
+                        'name'=>$n['name'],
+                        'status'=>[
+                            'key'=>$n['status'],
+                            'value'=>$n['status']? trans('admin.status_off') : trans('admin.status_on')
+                        ]
+                    ];
+                    foreach($n['authoritys'] as $h=>$i){
+                        $authority[$i['id']]=[
+                            'id'=>$i['id'],
+                            'parent_id'=>$i['parent_id'],
+                            'code'=>$i['code'],
+                            'name'=>$i['name'],
+                            'show'=>[
+                                'key'=>$i['show'],
+                                'value'=>$i['show']? trans('admin.show_off') : trans('admin.show_on')
+                            ],
+                            'status'=>[
+                                'key'=>$i['status'],
+                                'value'=>$i['status']? trans('admin.status_off') : trans('admin.status_on')
+                            ],
+                        ];
+                    }
+        
+                }
+           }
             $result[$k] = [
                 'id' => $v['id'],
                 'name' => $v['name'],
+                'role'=>Arr::shuffle($role),
+                'authority'=>Arr::shuffle($authority),
                 'nick_name' => $v['nick_name'],
                 'phone' => $v['phone'],
                 'email' => $v['email'],

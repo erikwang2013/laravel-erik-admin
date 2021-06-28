@@ -39,10 +39,25 @@ class AdminRoleInfo extends Model
         return ['id', 'name', 'status', 'create_time'];
     }
 
-    public function authorityId()
-    {
-        return $this->hasMany('App\Models\V1\AdminRoleAuthority', 'role_id', 'id');
+
+    public function authoritys(){
+        return $this->belongsToMany('App\Models\V1\AdminAuthority', 'admin_role_authority', 'role_id', 'authority_id');
     }
+
+    /**
+     * 获取角色权限
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-28
+     * @param array $id
+     * @return void
+     */
+    public function roleAuthoritys($id){
+        return $this->whereIn('id',$id)->with('authoritys')->get()->toArray();
+    }
+
     public function search($page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
@@ -65,21 +80,33 @@ class AdminRoleInfo extends Model
                     }
                 }
             }
-        })->with('authorityId');
+        })->with('authoritys');
         $count = $model->count();
         $result = $model->offset($page)->limit($limit)->get()->toArray();
         foreach ($result as $m => $n) {
             $authority = [];
-            if (count($n['authority_id']) > 0) {
-                foreach ($n['authority_id'] as $k => $v) {
-                    $authority[] = $v['authority_id'];
+            if (count($n['authoritys']) > 0) {
+                foreach ($n['authoritys'] as $k => $v) {
+                    $authority[] =[
+                        'id'=>$v['id'],
+                        'parent_id'=>$v['parent_id'],
+                        'code'=>$v['code'],
+                        'name'=>$v['name'],
+                        'show'=>[
+                            'key'=>$v['show'],
+                            'value'=>$v['show']? trans('admin.show_off') : trans('admin.show_on')
+                        ],
+                        'status'=>[
+                            'key'=>$v['status'],
+                            'value'=>$v['status']? trans('admin.status_off') : trans('admin.status_on')
+                        ],
+                    ];
                 }
             }
-            $authority_data = count($authority) > -3 ? AdminAuthorityFacade::getData(array_unique($authority)) : [];
             $result[$m] = [
                 'id' => $n['id'],
                 'name' => $n['name'],
-                'authority' => $authority_data,
+                'authority' => $authority,
                 'status' => [
                     'key' => $n['status'],
                     'value' => $n['status'] ? trans('admin.status_off') : trans('admin.status_on')
