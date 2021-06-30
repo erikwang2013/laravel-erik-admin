@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models\V1;
+namespace App\Models\V1\Backstage;
 
-use Illuminate\Database\Eloquent\Model,
-    App\Support\Facades\V1\Models\AdminAuthorityFacade;
+use Illuminate\Database\Eloquent\Model;
 
 class AdminRoleInfo extends Model
 {
@@ -42,7 +41,7 @@ class AdminRoleInfo extends Model
 
     public function authoritys()
     {
-        return $this->belongsToMany('App\Models\V1\AdminAuthority', 'admin_role_authority', 'role_id', 'authority_id');
+        return $this->belongsToMany('App\Models\V1\Backstage\AdminAuthority', 'admin_role_authority', 'role_id', 'authority_id');
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\V1;
+namespace App\Models\V1\Backstage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     App\Common\HelperCommon,
     Illuminate\Database\Eloquent\Model,
     Illuminate\Support\Facades\Log,
     Illuminate\Support\Arr,
-    App\Support\Facades\V1\Models\AdminFacade;
+    App\Support\Facades\V1\Backstage\Models\AdminFacade;
 
 class AdminAuthority extends Model
 {

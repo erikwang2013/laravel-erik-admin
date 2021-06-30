@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Validate\V1;
+namespace App\Validate\V1\Backstage;
 
-use  App\Http\Validations\V1\BaseValidation;
+use  App\Http\Validations\V1\Backstage\BaseValidation;
 
 class PageValidator extends BaseValidation
 {

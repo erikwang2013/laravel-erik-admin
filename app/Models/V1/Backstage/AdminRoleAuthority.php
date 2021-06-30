@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\V1;
+namespace App\Models\V1\Backstage;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -91,7 +91,8 @@ class AdminRoleAuthority extends Model
      * @param [type] $id
      * @return void
      */
-    public function getAll($id){
+    public function getAll($id)
+    {
         return $this->whereIn('role_id', $id)->get();
     }
 }

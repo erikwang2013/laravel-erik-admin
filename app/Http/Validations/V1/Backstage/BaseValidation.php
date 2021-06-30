@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Validations\V1;
+namespace App\Http\Validations\V1\Backstage;
 
 use Illuminate\Http\Request,
     App\Common\HelperCommon,

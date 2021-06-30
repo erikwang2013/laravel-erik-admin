@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\V1;
+namespace App\Models\V1\Backstage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Database\Eloquent\Model,
     Illuminate\Support\Facades\Hash,
     Illuminate\Support\Str,
     Illuminate\Support\Arr,
-    App\Support\Facades\V1\Models\AdminRoleInfoFacade,
+    App\Support\Facades\V1\Backstage\Models\AdminRoleInfoFacade,
     Illuminate\Support\Facades\Cache;
 
 class Admin extends Model
@@ -68,18 +68,18 @@ class Admin extends Model
      */
     public function infoId()
     {
-        return $this->hasOne('App\Models\V1\AdminInfo', 'id', 'id');
+        return $this->hasOne('App\Models\V1\Backstage\AdminInfo', 'id', 'id');
     }
 
 
     public function adminRole()
     {
-        return $this->hasMany('App\Models\V1\AdminRole', 'admin_id', 'id');
+        return $this->hasMany('App\Models\V1\Backstage\AdminRole', 'admin_id', 'id');
     }
 
     public function roles()
     {
-        return $this->belongsToMany('App\Models\V1\AdminRoleInfo', 'admin_role', 'admin_id', 'role_id');
+        return $this->belongsToMany('App\Models\V1\Backstage\AdminRoleInfo', 'admin_role', 'admin_id', 'role_id');
     }
 
 

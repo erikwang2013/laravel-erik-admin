@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\V1\Backstage;
 
-use App\Http\Controllers\Controller,
-    App\Support\Facades\V1\Models\BaseValidationFacade,
+use App\Http\Controllers\V1\Backstage\Controller,
+    App\Support\Facades\V1\Backstage\Models\BaseValidationFacade,
     App\Common\HelperCommon,
     Illuminate\Http\Request,
     Illuminate\Support\Facades\Validator,
-    App\Support\Facades\V1\Services\AuthorityServiceFacade;
+    App\Support\Facades\V1\Backstage\Services\AuthorityServiceFacade;
 
 class AuthorityController extends Controller
 {
