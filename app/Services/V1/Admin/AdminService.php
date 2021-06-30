@@ -23,7 +23,7 @@ class AdminService
         $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
-        $result = AdminFacade::search($pageData['page'], $pageData['limit'], $data);
+        $result = AdminFacade::search($token, $pageData['page'], $pageData['limit'], $data);
         return HelperCommon::reset($result['list'], $result['count']);
     }
 

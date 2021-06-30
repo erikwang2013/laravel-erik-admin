@@ -3,7 +3,9 @@
 namespace App\Services\V1\Admin;
 
 use App\Support\Facades\V1\Models\AdminFacade,
-    App\Common\HelperCommon;
+    App\Common\HelperCommon,
+    Illuminate\Support\Facades\Cache,
+    Illuminate\Support\Facades\Log;
 
 class PublicService
 {
@@ -40,11 +42,14 @@ class PublicService
             'phone' => $data->phone,
             'nick_name' => $data->nick_name,
             'email' => $data->email,
-            'token' => $token
+            'token' => $token['token']
         ];
         if ($data->authority_status['key'] == 0) {
             $user_data['authority'] = $data->authority_status;
         }
+        $data->token_hash = $token['token_hash'];
+        $data->token = $token['token'];
+        Cache::put($token['token'], json_encode($data), config('app.login_time'));
         return HelperCommon::reset($user_data, 0, 0);
     }
 
@@ -53,7 +58,7 @@ class PublicService
     public function logout($request)
     {
         $token = $request->header('authorization');
-        $data = AdminFacade::getTokenHash($token);
+        $data = AdminFacade::getLoginTokenInfo($token);
         if (empty($data)) {
             return HelperCommon::reset([], 0, 1, trans('admin.logout_fail'));
         }
@@ -65,6 +70,7 @@ class PublicService
         if (false == $update) {
             return HelperCommon::reset([], 0, 1, trans('admin.logout_fail'));
         }
+        Cache::pull($token);
         return HelperCommon::reset([], 0, 0, trans('admin.logout_true'));
     }
 }

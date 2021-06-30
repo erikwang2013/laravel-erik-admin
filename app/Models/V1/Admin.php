@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory,
     Illuminate\Support\Str,
     Illuminate\Support\Arr,
     App\Support\Facades\V1\Models\AdminRoleInfoFacade,
-    App\Http\Middleware\Backstage;
+    Illuminate\Support\Facades\Cache;
 
 class Admin extends Model
 {
@@ -93,7 +93,7 @@ class Admin extends Model
      * @param array $params
      * @return void
      */
-    public function search($page, $limit, $params = [])
+    public function search($token, $page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
         $model = $this->where(function ($model) use ($params) {
@@ -115,10 +115,8 @@ class Admin extends Model
         })->with('infoId')->with('roles');
         $count = $model->count();
         $result = $model->offset($page)->limit($limit)->get();
-        $backstage = new Backstage();
-        $login_info =  $backstage->login_info;
-        var_dump($login_info);
-        exit;
+        //获取当前登录信息
+        $login_info = $this->getLoginTokenInfo($token);
         foreach ($result as $k => $v) {
             $info = $v->infoId;
             //var_dump($v->infoId);exit;
@@ -156,10 +154,16 @@ class Admin extends Model
                 }
             }
 
-            $result_group = [
+            $result_list[] = [
                 'id' => $v->id,
                 'name' => $v->name,
                 'role' => Arr::shuffle($role),
+                'authority_status' => $login_info->authority == 0 ? [
+                    'authority_status' => [
+                        'key' => $v->authority,
+                        'value' => $v->authority ? trans('admin.authority_sort') : trans('admin.authority_hight')
+                    ]
+                ] : [],
                 'authority' => Arr::shuffle($authority),
                 'nick_name' => $v->nick_name,
                 'phone' => $v->phone,
@@ -179,17 +183,6 @@ class Admin extends Model
                 'create_time' => $info->create_time,
                 'update_time' => $info->update_time
             ];
-
-            if ($v->authority == 0) {
-                $result_add = [
-                    'authority_status' => [
-                        'key' => $v->authority,
-                        'value' => $v->authority ? trans('admin.authority_sort') : trans('admin.authority_hight')
-                    ]
-                ];
-                $result_group = array_merge($result_group, $result_add);
-            }
-            $result_list[] = $result_group;
         }
         unset($result);
         unset($k);
@@ -323,27 +316,35 @@ class Admin extends Model
     public function setToken($id)
     {
         $token = Str::random(88);
-        $result = $this->updateData(['access_token' => $token, 'token_hash' => Hash::make($token)], $id);
+        $hash = Hash::make($token);
+        $result = $this->updateData(['access_token' => $token, 'token_hash' => $hash], $id);
         if (false == $result) {
             return false;
         }
-        return $token;
+        return ['token' => $token, 'token_hash' => $hash];
     }
 
+
     /**
-     * 获取tokenhash
+     * 获取登录数据
      *
      * @Author erik
      * @Email erik@erik.xyz
      * @address https://erik.xyz
-     * @Date 2021-06-17
+     * @Date 2021-06-30
      * @param [type] $token
-     * @return void
+     * @return object
      */
-    public function getTokenHash($token)
+    public function getLoginTokenInfo($token)
     {
-        return $this->select('token_hash', 'id')->where('access_token', $token)->first();
+        $result = Cache::get($token);
+        if ($result) {
+            return json_decode($result);
+        }
+        return $result;
+        //return $this->where('access_token', $token)->first();
     }
+
 
     /**
      * 校验token

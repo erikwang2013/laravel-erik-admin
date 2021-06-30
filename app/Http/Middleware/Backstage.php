@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request,
     App\Support\Facades\V1\Models\AdminFacade,
-    App\Common\HelperCommon,
-    Illuminate\Support\Facades\Cache;
+    App\Common\HelperCommon;
 
 
 class Backstage
@@ -24,20 +23,16 @@ class Backstage
     {
         $token = htmlentities($request->header('authorization'), ENT_QUOTES);
         if (strlen($token) != 88) {
-            echo json_encode(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
-            exit;
+            return response()->json(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
         }
-        $data = AdminFacade::getTokenHash($token);
-        if (empty($data)) {
-            echo json_encode((HelperCommon::reset([], 0, 1, trans('admin.check_token_select'))));
-            exit;
+        $data = AdminFacade::getLoginTokenInfo($token);
+        if (false == $data) {
+            return response()->json(HelperCommon::reset([], 0, 1, trans('admin.check_token_select')));
         }
         $check = AdminFacade::checkToken($token, $data->token_hash);
         if (false == $check) {
-            echo json_encode(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
-            exit;
+            return response()->json(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
         }
-        Cache::put($token, json_encode($data));
         return $next($request);
     }
 }
