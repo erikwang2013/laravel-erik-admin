@@ -3,7 +3,8 @@
 namespace App\Services\V1\Admin;
 
 use App\Support\Facades\V1\Models\AdminAuthorityFacade,
-    App\Common\HelperCommon;
+    App\Common\HelperCommon,
+    App\Support\Facades\V1\Services\PublicServiceFacade;
 
 class AuthorityService
 {
@@ -19,6 +20,9 @@ class AuthorityService
     public function store($params)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         $result = AdminAuthorityFacade::store($data);
@@ -31,6 +35,9 @@ class AuthorityService
     public function update($params, $id)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         $result = AdminAuthorityFacade::updateData($data, $id);
@@ -43,6 +50,9 @@ class AuthorityService
     public function destroy($params)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         $result = AdminAuthorityFacade::deleteAll($params['ids']);
         if (!$result) {
             return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));

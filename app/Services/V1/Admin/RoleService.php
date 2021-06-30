@@ -6,13 +6,17 @@ use App\Support\Facades\V1\Models\AdminRoleAuthorityFacade,
     App\Support\Facades\V1\Models\AdminRoleInfoFacade,
     Illuminate\Support\Facades\DB,
     App\Common\HelperCommon,
-    Exception;
+    Exception,
+    App\Support\Facades\V1\Services\PublicServiceFacade;
 
 class RoleService
 {
     public function index($params, $page)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
         $result = AdminRoleInfoFacade::search($page['page'], $page['limit'], $data);
@@ -22,6 +26,9 @@ class RoleService
     public function store($params)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         $params['create_time'] = date('Y-m-d H:i:s');
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
@@ -57,6 +64,9 @@ class RoleService
     public function update($params, $id)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
         try {
@@ -100,6 +110,9 @@ class RoleService
     public function destroy($params)
     {
         $token = $params['token'];
+        if (false == PublicServiceFacade::checkAuthorityAccess($token)) {
+            return  HelperCommon::reset([], 0, 1, trans('public.access_authority_faill'));
+        }
         try {
             DB::beginTransaction();
             $result = AdminRoleInfoFacade::deleteAll($params['ids']);

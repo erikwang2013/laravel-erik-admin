@@ -74,4 +74,24 @@ class PublicService
         Cache::pull($token);
         return HelperCommon::reset([], 0, 0, trans('admin.logout_true'));
     }
+
+    /**
+     *登录用户是否超级管理
+     *
+     * @Author erik
+     * @Email erik@erik.xyz
+     * @address https://erik.xyz
+     * @Date 2021-06-30
+     * @param [type] $token
+     * @return void
+     */
+    public function checkAuthorityAccess($token)
+    {
+        $admin = AdminFacade::getLoginTokenInfo($token);
+        //是否超级管理 0=是 1=否
+        if ($admin->authority_status->key == 0) {
+            return true;
+        }
+        return false;
+    }
 }
