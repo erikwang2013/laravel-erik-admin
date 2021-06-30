@@ -12,7 +12,7 @@ class AuthorityService
         $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
-        $result = AdminAuthorityFacade::search($page['page'], $page['limit'], $data);
+        $result = AdminAuthorityFacade::search($token, $page['page'], $page['limit'], $data);
         return HelperCommon::reset($result['list'], $result['count']);
     }
 

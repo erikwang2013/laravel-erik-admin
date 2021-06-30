@@ -5,7 +5,9 @@ namespace App\Models\V1;
 use Illuminate\Database\Eloquent\Factories\HasFactory,
     App\Common\HelperCommon,
     Illuminate\Database\Eloquent\Model,
-    Illuminate\Support\Facades\Log;
+    Illuminate\Support\Facades\Log,
+    Illuminate\Support\Arr,
+    App\Support\Facades\V1\Models\AdminFacade;
 
 class AdminAuthority extends Model
 {
@@ -84,7 +86,7 @@ class AdminAuthority extends Model
         }
         return $result;
     }
-    public function search($page, $limit, $params = [])
+    public function search($token, $page, $limit, $params = [])
     {
         $page = ceil($page - 1) / $limit;
         $model = $this->where(function ($model) use ($params) {
@@ -110,22 +112,31 @@ class AdminAuthority extends Model
             }
         });
         $count = $model->count();
-        $result = $model->offset($page)->limit($limit)->get()->toArray();
+        $result = $model->offset($page)->limit($limit)->get();
         $parent =  HelperCommon::array_keys_header($this->getParent(), 'id');
+        $login_info = AdminFacade::getLoginTokenInfo($token);
+        $authority = Arr::pluck($login_info->authority_info, 'id');
+
         foreach ($result as $m => $n) {
+            //如果是普通管理员
+            if ($login_info->authority_status->key == 1 && false == in_array($n->id, $authority)) {
+                continue;
+            }
             $result[$m] = [
-                'id' => $n['id'],
-                'parent_id' => $n['parent_id'],
-                'parent_name' => $n['parent_id'] == 0 ? trans('admin.authority_top') : $parent[$n['parent_id']]['name'],
-                'code' => $n['code'],
-                'name' => $n['name'],
+                'id' => $n->id,
+                'parent' => [
+                    'key' => $n->parent_id,
+                    'name' => $n->parent_id == 0 ? trans('admin.authority_top') : $parent[$n->parent_id]['name']
+                ],
+                'code' => $n->code,
+                'name' => $n->name,
                 'show' => [
-                    'key' => $n['show'],
-                    'value' => $n['show'] ? trans('admin.show_off') : trans('admin.show_on')
+                    'key' => $n->show,
+                    'value' => $n->show ? trans('admin.show_off') : trans('admin.show_on')
                 ],
                 'status' => [
-                    'key' => $n['status'],
-                    'value' => $n['status'] ? trans('admin.status_off') : trans('admin.status_on')
+                    'key' => $n->status,
+                    'value' => $n->status ? trans('admin.status_off') : trans('admin.status_on')
                 ]
             ];
         }

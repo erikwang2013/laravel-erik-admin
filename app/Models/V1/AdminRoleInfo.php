@@ -40,7 +40,8 @@ class AdminRoleInfo extends Model
     }
 
 
-    public function authoritys(){
+    public function authoritys()
+    {
         return $this->belongsToMany('App\Models\V1\AdminAuthority', 'admin_role_authority', 'role_id', 'authority_id');
     }
 
@@ -54,8 +55,12 @@ class AdminRoleInfo extends Model
      * @param array $id
      * @return void
      */
-    public function roleAuthoritys($id){
-        return $this->whereIn('id',$id)->with('authoritys')->get();
+    public function roleAuthoritys($id = [])
+    {
+        if (count($id) > 0) {
+            $this->whereIn('id', $id);
+        }
+        return $this->with('authoritys')->get();
     }
 
     public function search($page, $limit, $params = [])
@@ -87,18 +92,18 @@ class AdminRoleInfo extends Model
             $authority = [];
             if (count($n['authoritys']) > 0) {
                 foreach ($n['authoritys'] as $k => $v) {
-                    $authority[] =[
-                        'id'=>$v['id'],
-                        'parent_id'=>$v['parent_id'],
-                        'code'=>$v['code'],
-                        'name'=>$v['name'],
-                        'show'=>[
-                            'key'=>$v['show'],
-                            'value'=>$v['show']? trans('admin.show_off') : trans('admin.show_on')
+                    $authority[] = [
+                        'id' => $v['id'],
+                        'parent_id' => $v['parent_id'],
+                        'code' => $v['code'],
+                        'name' => $v['name'],
+                        'show' => [
+                            'key' => $v['show'],
+                            'value' => $v['show'] ? trans('admin.show_off') : trans('admin.show_on')
                         ],
-                        'status'=>[
-                            'key'=>$v['status'],
-                            'value'=>$v['status']? trans('admin.status_off') : trans('admin.status_on')
+                        'status' => [
+                            'key' => $v['status'],
+                            'value' => $v['status'] ? trans('admin.status_off') : trans('admin.status_on')
                         ],
                     ];
                 }

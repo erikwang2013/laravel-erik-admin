@@ -38,6 +38,7 @@ class PublicService
         $user_data = [
             'id' => $data->id,
             'name' => $data->name,
+            'role' => $data->role,
             'authority_info' => $data->authority_info,
             'phone' => $data->phone,
             'nick_name' => $data->nick_name,
