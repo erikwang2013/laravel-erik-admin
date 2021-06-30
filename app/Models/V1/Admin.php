@@ -342,7 +342,6 @@ class Admin extends Model
             return json_decode($result);
         }
         return $result;
-        //return $this->where('access_token', $token)->first();
     }
 
 
