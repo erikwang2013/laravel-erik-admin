@@ -9,6 +9,7 @@ class AuthorityService
 {
     public function index($params, $page)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         $result = AdminAuthorityFacade::search($page['page'], $page['limit'], $data);
@@ -17,6 +18,7 @@ class AuthorityService
 
     public function store($params)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         $result = AdminAuthorityFacade::store($data);
@@ -28,6 +30,7 @@ class AuthorityService
 
     public function update($params, $id)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminAuthorityFacade::class, $params, 0);
         $result = AdminAuthorityFacade::updateData($data, $id);
@@ -37,9 +40,10 @@ class AuthorityService
         return HelperCommon::reset([], 0, 0);
     }
 
-    public function destroy($id)
+    public function destroy($params)
     {
-        $result = AdminAuthorityFacade::deleteAll($id);
+        $token = $params['token'];
+        $result = AdminAuthorityFacade::deleteAll($params['ids']);
         if (!$result) {
             return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
         }

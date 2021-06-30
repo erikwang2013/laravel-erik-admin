@@ -5,11 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request,
     App\Support\Facades\V1\Models\AdminFacade,
-    App\Common\HelperCommon;
+    App\Common\HelperCommon,
+    Illuminate\Support\Facades\Cache;
 
 
 class Backstage
 {
+    public $login_info;
     /**
      * Handle an incoming request.
      *
@@ -35,6 +37,7 @@ class Backstage
             echo json_encode(HelperCommon::reset([], 0, 1, trans('admin.check_token_fail')));
             exit;
         }
+        Cache::put($token, json_encode($data));
         return $next($request);
     }
 }

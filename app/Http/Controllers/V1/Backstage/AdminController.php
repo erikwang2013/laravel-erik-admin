@@ -32,6 +32,7 @@ class AdminController extends Controller
         if (!BaseValidationFacade::check($pageData)) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::index($params, $pageData);
     }
 
@@ -52,6 +53,7 @@ class AdminController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::store($params);
     }
 
@@ -72,6 +74,7 @@ class AdminController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
         unset($params['id']);
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::update($params, $id);
     }
 
@@ -91,7 +94,9 @@ class AdminController extends Controller
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }
         }
-        return AdminServiceFacade::destroy($ids);
+        $params['ids'] = $ids;
+        $params['token'] = $this->setLoginToken;
+        return AdminServiceFacade::destroy($params);
     }
 
 
@@ -113,6 +118,7 @@ class AdminController extends Controller
             $params['roles'] = $ids;
             unset($params['role_id']);
         }
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::roleStore($params);
     }
 
@@ -135,6 +141,7 @@ class AdminController extends Controller
             $params['roles'] = $ids;
             unset($params['role_id']);
         }
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::roleUpdate($params);
     }
 
@@ -161,6 +168,7 @@ class AdminController extends Controller
         }
         $params['ids'] = $ids;
         unset($params['id']);
+        $params['token'] = $this->setLoginToken;
         return AdminServiceFacade::roleDestroy($params);
     }
 }

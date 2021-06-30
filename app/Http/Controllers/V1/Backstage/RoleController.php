@@ -29,7 +29,7 @@ class RoleController extends Controller
         if (!BaseValidationFacade::check($pageData)) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
-
+        $params['token'] = $this->setLoginToken;
         return RoleServiceFacade::index($params, $pageData);
     }
 
@@ -52,6 +52,7 @@ class RoleController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
+        $params['token'] = $this->setLoginToken;
         return RoleServiceFacade::store($params);
     }
 
@@ -74,6 +75,7 @@ class RoleController extends Controller
             $params['authority_id'] = $authority_id;
         }
         unset($params['id']);
+        $params['token'] = $this->setLoginToken;
         return RoleServiceFacade::update($params, $id);
     }
 
@@ -87,6 +89,8 @@ class RoleController extends Controller
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }
         }
-        return RoleServiceFacade::destroy($ids);
+        $params['ids'] = $ids;
+        $params['token'] = $this->setLoginToken;
+        return RoleServiceFacade::destroy($params);
     }
 }

@@ -20,6 +20,7 @@ class AdminService
      */
     public function index($params, $pageData)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $result = AdminFacade::search($pageData['page'], $pageData['limit'], $data);
@@ -39,6 +40,7 @@ class AdminService
      */
     public function store($params)
     {
+        $token = $params['token'];
         $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
         $data['hash'] = AdminFacade::setPassword($params['password']);
@@ -83,6 +85,7 @@ class AdminService
      */
     public function update($params, $id)
     {
+        $token = $params['token'];
         $admin_data = HelperCommon::filterKey(AdminFacade::class, $params, 0);
         $info_data = HelperCommon::filterKey(AdminInfoFacade::class, $params, 0);
         try {
@@ -123,15 +126,16 @@ class AdminService
      * @param [type] $ids
      * @return void
      */
-    public function destroy($ids)
+    public function destroy($params)
     {
+        $token = $params['token'];
         DB::beginTransaction();
-        $result = AdminFacade::deleteAll($ids);
+        $result = AdminFacade::deleteAll($params['ids']);
         if (!$result) {
             DB::rollBack();
             return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
         }
-        $info_result = AdminInfoFacade::deleteAll($ids);
+        $info_result = AdminInfoFacade::deleteAll($params['ids']);
         if (!$info_result) {
             DB::rollBack();
             return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
@@ -152,6 +156,7 @@ class AdminService
      */
     public function roleStore($params)
     {
+        $token = $params['token'];
         $first = AdminFacade::getFirstData($params['id']);
         //不是超级管理员
         if ($params['authority'] == 1) {
@@ -201,6 +206,7 @@ class AdminService
      */
     public function roleUpdate($params)
     {
+        $token = $params['token'];
         $first = AdminFacade::getFirstData($params['id']);
         //不是超级管理员
         if ($params['authority'] == 1) {
@@ -246,6 +252,7 @@ class AdminService
 
     public function roleDestroy($params)
     {
+        $token = $params['token'];
         foreach ($params['ids'] as $k => $v) {
             DB::beginTransaction();
             $first = AdminFacade::getFirstData($v);

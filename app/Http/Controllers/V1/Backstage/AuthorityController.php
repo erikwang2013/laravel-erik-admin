@@ -26,7 +26,7 @@ class AuthorityController extends Controller
         if (!BaseValidationFacade::check($pageData)) {
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
-
+        $params['token'] = $this->setLoginToken;
         return AuthorityServiceFacade::index($params, $pageData);
     }
 
@@ -41,6 +41,7 @@ class AuthorityController extends Controller
         //生成唯一id
         $id = HelperCommon::getCreateId();
         $params['id'] = $id;
+        $params['token'] = $this->setLoginToken;
         return AuthorityServiceFacade::store($params);
     }
 
@@ -53,6 +54,7 @@ class AuthorityController extends Controller
             return HelperCommon::reset([], 0, 1, BaseValidationFacade::getError());
         }
         unset($params['id']);
+        $params['token'] = $this->setLoginToken;
         return AuthorityServiceFacade::update($params, $id);
     }
 
@@ -66,7 +68,9 @@ class AuthorityController extends Controller
                 return HelperCommon::reset([], 0, 1, $validator->errors());
             }
         }
-        return AuthorityServiceFacade::destroy($ids);
+        $params['token'] = $this->setLoginToken;
+        $params['ids'] = $ids;
+        return AuthorityServiceFacade::destroy($params);
     }
 
     public function parentData()

@@ -36,13 +36,15 @@ class PublicService
         $user_data = [
             'id' => $data->id,
             'name' => $data->name,
-            'authority'=>$data->authority_status,
-            'authority_info'=>$data->authority_info,
+            'authority_info' => $data->authority_info,
             'phone' => $data->phone,
             'nick_name' => $data->nick_name,
             'email' => $data->email,
             'token' => $token
         ];
+        if ($data->authority_status['key'] == 0) {
+            $user_data['authority'] = $data->authority_status;
+        }
         return HelperCommon::reset($user_data, 0, 0);
     }
 

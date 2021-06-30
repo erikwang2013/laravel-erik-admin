@@ -12,6 +12,7 @@ class RoleService
 {
     public function index($params, $page)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
         $result = AdminRoleInfoFacade::search($page['page'], $page['limit'], $data);
@@ -20,6 +21,7 @@ class RoleService
 
     public function store($params)
     {
+        $token = $params['token'];
         $params['create_time'] = date('Y-m-d H:i:s');
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
@@ -54,6 +56,7 @@ class RoleService
 
     public function update($params, $id)
     {
+        $token = $params['token'];
         //过滤存在的数据
         $data = HelperCommon::filterKey(AdminRoleInfoFacade::class, $params, 0);
         try {
@@ -94,16 +97,17 @@ class RoleService
         }
     }
 
-    public function destroy($id)
+    public function destroy($params)
     {
+        $token = $params['token'];
         try {
             DB::beginTransaction();
-            $result = AdminRoleInfoFacade::deleteAll($id);
+            $result = AdminRoleInfoFacade::deleteAll($params['ids']);
             if (!$result) {
                 DB::rollBack();
                 return HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
             }
-            $result_authority = AdminRoleAuthorityFacade::deleteAll($id);
+            $result_authority = AdminRoleAuthorityFacade::deleteAll($params['ids']);
             if (!$result_authority) {
                 DB::rollBack();
                 return  HelperCommon::reset([], 0, 1, trans('public.delete_data_fail'));
