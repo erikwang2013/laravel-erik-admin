@@ -38,12 +38,12 @@ class PublicService
         $user_data = [
             'id' => $data->id,
             'name' => $data->name,
-            'role' => $data->role,
-            'authority_info' => $data->authority_info,
             'phone' => $data->phone,
             'nick_name' => $data->nick_name,
             'email' => $data->email,
-            'token' => $token['token']
+            'token' => $token['token'],
+            'role' => $data->role,
+            'authority_info' => $data->authority_info
         ];
         if ($data->authority_status['key'] == 0) {
             $user_data['authority'] = $data->authority_status;
